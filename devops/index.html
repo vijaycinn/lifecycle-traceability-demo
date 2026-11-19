@@ -1,0 +1,1319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Azure DevOps vs. GitHub — Enterprise Traceability, Agentic DevOps &amp; Licensing Showcase</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f7f6f3; --paper-2:#efeeea; --ink:#16171a; --ink-2:#55575e; --ink-3:#8b8d94;
+  --rule:#dad8d2; --rule-hard:#b9b7b0;
+  --signal:#a32b1f; --signal-bg:#f6e9e6;
+  --live:#1c6444;   --live-bg:#e6efe9;
+  --serif:"Newsreader",Georgia,serif;
+  --cond:"IBM Plex Sans Condensed","Roboto Condensed","Segoe UI",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",Consolas,monospace;
+  --elev-ink:22 23 26;
+}
+@media (prefers-color-scheme:dark){
+  :root{--paper:#141416;--paper-2:#1c1d20;--ink:#eceae5;--ink-2:#a3a29d;--ink-3:#75767b;
+        --rule:#2c2d31;--rule-hard:#43444a;--signal:#e2705f;--signal-bg:#2a1a17;
+        --live:#5fb98c;--live-bg:#152420;--elev-ink:0 0 0;}
+}
+*{box-sizing:border-box}
+.mast .when,.sec-h .note,.tag,.callout .msg,.kv dt,.kv code,.ti .d,.sq .n,.pull cite,
+.colophon,.tbl td.num,.tbl th,.tbl td code,.matrix th,.matrix td.num,.smeta,details summary .qtag,text{
+  font-variant-numeric:tabular-nums
+}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--cond);
+  font-size:15px;line-height:1.45;-webkit-font-smoothing:antialiased;
+  font-kerning:normal;font-optical-sizing:auto}
+.vc p,.fig .cap,.say li,.kv dd,.faq-a,.exhibit-cap{text-wrap:pretty}
+.sheet{max-width:1040px;margin:0 auto;padding:36px 28px 68px}
+a{color:var(--ink);text-decoration-color:var(--rule-hard);text-underline-offset:2px}
+a:hover{color:var(--live);text-decoration-color:var(--live)}
+code{font-family:var(--mono);font-size:11.5px;background:var(--paper-2);padding:1px 5px}
+
+/* navigation strip */
+.toc{display:flex;flex-wrap:wrap;gap:6px 14px;margin:14px 0 0;padding:8px 0;
+  border-bottom:1px solid var(--rule);font-family:var(--mono);font-size:10.5px;
+  text-transform:uppercase;letter-spacing:.06em}
+.toc a{text-decoration:none;color:var(--ink-2)}
+.toc a:hover{color:var(--live);text-decoration:underline}
+
+/* masthead */
+.mast{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;
+  border-bottom:2px solid var(--ink);padding-bottom:10px}
+.mast h1{font-size:32px;font-weight:700;text-transform:uppercase;letter-spacing:.005em;margin:0;text-wrap:balance}
+.mast .kick{font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--signal);margin-bottom:4px}
+.mast .when{font-family:var(--mono);font-size:11px;color:var(--ink-3);text-align:right;
+  text-transform:uppercase;letter-spacing:.05em;line-height:1.7;white-space:nowrap}
+
+/* verdict strip */
+.verdict{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--rule);
+  border:1px solid var(--rule);margin:20px 0 0}
+.elevated{box-shadow:
+  0 1px 1px -.5px rgb(var(--elev-ink)/.05),
+  0 3px 3px -1.5px rgb(var(--elev-ink)/.05),
+  0 6px 6px -3px rgb(var(--elev-ink)/.05),
+  0 12px 12px -6px rgb(var(--elev-ink)/.05)}
+.vc{background:var(--paper);padding:14px 16px;position:relative}
+.vc .st{font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+  margin-bottom:6px;color:var(--ink-3)}
+.vc.risk .st{color:var(--signal)} .vc.go .st{color:var(--live)}
+.vc p{margin:0;font-family:var(--cond);font-size:15px;line-height:1.45;color:var(--ink)}
+.vc b,.vc .lit{font-weight:600;color:var(--ink);border-bottom:2px solid var(--rule-hard);padding-bottom:1px}
+.vc.risk b{border-bottom-color:var(--signal)}
+.vc.go .lit{border-bottom-color:var(--live)}
+.keyline::before{content:"";position:absolute;inset:0;z-index:1;padding:1px;
+  background:linear-gradient(135deg,var(--rule-hard) 0%,var(--live) 50%,var(--rule-hard) 100%);
+  -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  mask-composite:exclude;pointer-events:none}
+
+/* section */
+.sec{margin-top:34px}
+.sec-h{display:flex;align-items:baseline;gap:12px;border-bottom:1.5px solid var(--ink);
+  padding-bottom:5px;margin-bottom:14px;flex-wrap:wrap}
+.sec-h h2{font-size:19px;font-weight:700;text-transform:uppercase;letter-spacing:.01em;margin:0;text-wrap:balance}
+.sec-h .note{font-family:var(--mono);font-size:10.5px;color:var(--ink-3);
+  text-transform:uppercase;letter-spacing:.05em;margin-left:auto;white-space:nowrap}
+
+/* headline figure */
+.fig{display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;margin:0 0 6px}
+.fig .big{font-family:var(--mono);font-variant-numeric:tabular-nums;
+  font-size:clamp(30px,5.5vw,48px);font-weight:700;letter-spacing:-.045em;line-height:1;
+  text-wrap:balance}
+.fig .big em{font-style:normal;color:var(--live)}
+.fig .cap{font-family:var(--cond);color:var(--ink-2);font-size:15px;max-width:560px}
+
+/* bars */
+.bars{margin-top:14px}
+.brow{display:grid;grid-template-columns:185px 1fr 130px;gap:12px;align-items:center;
+  padding:4px 0;font-size:13.5px}
+.btrack{height:16px;background:var(--paper-2);border:1px solid var(--rule);display:flex;
+  align-items:center;overflow:hidden;box-shadow:inset 0 1px 2px rgb(var(--elev-ink)/.08)}
+.bfill{display:flex;align-items:center;height:100%;background:var(--ink-2);min-width:2px;flex:0 0 auto}
+.brow.hot .bfill{background:var(--signal)}
+.brow.go .bfill{background:var(--live)}
+.brow.hot{color:var(--signal)}
+.brow.go{color:var(--live)}
+.brow .val{font-family:var(--mono);font-size:11.5px;text-align:right;color:var(--ink-2);white-space:nowrap}
+.brow.hot .val{color:var(--signal);font-weight:600}
+.brow.go .val{color:var(--live);font-weight:600}
+.tag{font-family:var(--mono);font-size:10px;color:var(--ink-3);margin-left:7px;
+  white-space:nowrap;letter-spacing:.03em;line-height:1}
+.tag.inv{color:var(--paper);margin-left:0;padding:0 7px}
+.callout{display:grid;grid-template-columns:185px 1fr;gap:12px;margin-top:6px}
+.callout .msg{font-family:var(--mono);font-size:10.5px;color:var(--ink-2);line-height:1.5}
+
+/* framed exhibit */
+.exhibit{position:relative;padding:clamp(14px,2vw,20px);border:1px solid var(--rule);
+  background:var(--paper-2);margin-top:10px}
+.exhibit::before,.exhibit::after{content:"";position:absolute;width:16px;height:16px;pointer-events:none}
+.exhibit::before{inset:0 auto auto 0;border-top:2px solid var(--rule-hard);border-left:2px solid var(--rule-hard)}
+.exhibit::after{inset:auto 0 0 auto;border-right:2px solid var(--rule-hard);border-bottom:2px solid var(--rule-hard)}
+.exhibit-kicker{display:flex;justify-content:space-between;gap:16px;margin-bottom:10px;
+  color:var(--ink-3);font:700 10px/1.2 var(--mono);letter-spacing:.1em;text-transform:uppercase;flex-wrap:wrap}
+.exhibit-visual{border:1px solid var(--rule);background:var(--paper);padding:10px;overflow-x:auto}
+.exhibit-visual svg{width:100%;height:auto;display:block;min-width:680px}
+.exhibit-cap{font-family:var(--mono);font-size:10.5px;color:var(--ink-3);margin-top:9px;line-height:1.5}
+.exhibit-cap b{color:var(--ink-2);font-weight:600}
+text{font-family:"IBM Plex Mono",Consolas,monospace}
+
+/* matrix */
+.matrix{border-top:2px solid var(--rule-hard);overflow-x:auto;background:var(--paper)}
+.matrix table{border-collapse:collapse;width:100%;min-width:660px;font-size:13.5px}
+.matrix th,.matrix td{padding:10px 12px;border-bottom:1px solid var(--rule);
+  border-right:1px solid var(--rule);text-align:left;vertical-align:top;line-height:1.42}
+.matrix th:last-child,.matrix td:last-child{border-right:0}
+.matrix thead th{background:var(--paper-2);color:var(--ink-2);font:700 10px/1.2 var(--mono);
+  letter-spacing:.09em;text-transform:uppercase}
+.matrix tbody th{width:21%;color:var(--ink);font-weight:600}
+.matrix td{color:var(--ink-2)}
+.matrix td strong{color:var(--ink)}
+.matrix .num{font-family:var(--mono);color:var(--ink);text-align:right;white-space:nowrap}
+.matrix .is-risk{color:var(--signal);font-weight:600}
+.matrix .is-live{color:var(--live);font-weight:600}
+
+/* simple tables */
+.tblwrap{overflow-x:auto}
+.tbl{width:100%;border-collapse:collapse;margin-top:4px;font-size:13.5px}
+.tbl th{font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.09em;
+  text-transform:uppercase;color:var(--ink-3);text-align:left;padding:0 12px 6px 0;
+  border-bottom:1px solid var(--rule-hard)}
+.tbl th.num,.tbl td.num{text-align:right;padding-right:0}
+.tbl td{padding:7px 12px 7px 0;border-bottom:1px solid var(--rule);vertical-align:top;line-height:1.4}
+.tbl td.num{font-family:var(--mono);font-size:11.5px;color:var(--ink-2);white-space:nowrap}
+.tbl tr.hot td{color:var(--signal)}
+.tbl tr.go td{color:var(--live)}
+
+/* sequence */
+.seq{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--rule);
+  border:1px solid var(--rule);margin-top:4px}
+.seq.seq-3{grid-template-columns:repeat(3,1fr)}
+@media(max-width:820px){.seq,.seq.seq-3{grid-template-columns:1fr}}
+.sq{background:var(--paper);padding:12px 13px}
+.sq .n{font-family:var(--mono);font-size:11px;font-weight:600;color:var(--live);margin-bottom:5px}
+.sq .t{font-size:12.5px;font-weight:700;text-transform:uppercase;letter-spacing:.03em;
+  margin-bottom:4px;line-height:1.25}
+.sq p{margin:0;font-size:12.5px;line-height:1.4;color:var(--ink-2)}
+
+/* say / don't */
+.say{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--rule);
+  border:1px solid var(--rule)}
+@media(max-width:640px){.say{grid-template-columns:1fr}}
+.say>div{background:var(--paper);padding:13px 15px}
+.say h3{font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;margin:0 0 9px}
+.say .no h3{color:var(--signal)} .say .yes h3{color:var(--live)}
+.say ul{margin:0;padding-left:16px} .say li{margin-bottom:7px;font-size:13.5px;line-height:1.4}
+.say li:last-child{margin-bottom:0}
+
+/* quote + kv */
+.pull{margin:0;padding:12px 0 12px 18px;border-left:3px solid var(--signal);
+  font-family:var(--serif);font-style:italic;font-size:16px;line-height:1.45}
+.pull cite{display:block;margin-top:7px;font-style:normal;font-family:var(--mono);
+  font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
+.kv{display:grid;grid-template-columns:168px 1fr;gap:7px 14px;font-size:13.5px;margin-top:14px}
+.kv dt{font-family:var(--mono);font-size:10.5px;color:var(--ink-3);text-transform:uppercase;
+  letter-spacing:.05em;padding-top:2px}
+.kv dd{margin:0;line-height:1.45}
+
+/* presenter script */
+.script{border-top:1px solid var(--rule)}
+.srow{display:grid;grid-template-columns:168px 1fr;gap:16px;padding:13px 0;border-bottom:1px solid var(--rule)}
+.smeta{font-family:var(--mono);font-size:10.5px;color:var(--ink-3);line-height:1.55;overflow-wrap:anywhere}
+.smeta code{overflow-wrap:anywhere;word-break:break-word}
+.smeta .stime{color:var(--live);font-weight:700;letter-spacing:.06em;text-transform:uppercase;display:block;margin-bottom:3px}
+.sbody h3{margin:0 0 4px;font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.01em}
+.sbody .sdo{margin:0 0 6px;font-size:13.5px;color:var(--ink-2)}
+.sbody .squote{margin:0;padding:8px 12px;background:var(--paper-2);border-left:2.5px solid var(--live);
+  font-size:13.5px;line-height:1.45;color:var(--ink)}
+@media(max-width:640px){.srow{grid-template-columns:1fr;gap:6px}}
+
+/* expandable snippets / faqs */
+.faq{border-top:1px solid var(--rule)}
+.faq details{border-bottom:1px solid var(--rule);padding:10px 0}
+.faq summary{cursor:pointer;list-style:none;display:flex;align-items:baseline;justify-content:space-between;
+  gap:12px;font-weight:600;font-size:14.5px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary .qtag{font-family:var(--mono);font-size:10px;color:var(--ink-3);text-transform:uppercase;
+  letter-spacing:.06em;white-space:nowrap}
+.faq details[open] summary{color:var(--live)}
+.faq .faq-a{margin:8px 0 2px;color:var(--ink-2);font-size:13.5px;line-height:1.48}
+.codeblock{margin:8px 0 0;padding:11px 13px;background:var(--paper-2);border:1px solid var(--rule);
+  font-family:var(--mono);font-size:11.5px;line-height:1.5;overflow-x:auto;color:var(--ink);white-space:pre}
+
+/* timeline */
+.tl{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:0;margin-top:6px;position:relative}
+.tl::before{content:"";position:absolute;left:0;right:0;top:31px;height:1px;background:var(--rule-hard)}
+.ti{text-align:center;padding:0 4px;position:relative}
+.ti .d{font-family:var(--mono);font-size:9.5px;color:var(--ink-3);height:26px;letter-spacing:.03em;line-height:1.25}
+.ti .dot{width:11px;height:11px;border-radius:50%;background:var(--ink-3);margin:0 auto;position:relative;z-index:1;border:2px solid var(--paper)}
+.ti.bad .dot{background:var(--signal)} .ti.good .dot{background:var(--live)}
+.ti.now .dot{background:var(--live);width:15px;height:15px;margin-top:-2px;box-shadow:0 0 0 3px var(--live-bg)}
+.ti .t{font-size:12px;line-height:1.3;margin-top:7px;font-weight:500}
+.ti.bad .t{color:var(--signal)} .ti.good .t{color:var(--live)} .ti.now .t{color:var(--live);font-weight:700}
+
+.colophon{margin-top:38px;padding-top:12px;border-top:1px solid var(--rule);
+  font-family:var(--mono);font-size:10.5px;line-height:1.75;color:var(--ink-3)}
+.colophon b{color:var(--ink-2);font-weight:500}
+:focus-visible{outline:2px solid var(--signal);outline-offset:3px}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+@media(max-width:700px){
+  .tl{grid-auto-flow:row;grid-auto-columns:auto}
+  .tl::before{left:5px;right:auto;top:0;bottom:0;width:1px;height:auto}
+  .ti{display:grid;grid-template-columns:12px 74px 1fr;gap:10px;text-align:left;align-items:center;padding:5px 0}
+  .ti .d{height:auto;order:2} .ti .dot{order:1} .ti .t{margin-top:0;order:3}
+}
+@media(max-width:640px){
+  .sheet{padding:24px 16px 52px}.mast{flex-direction:column;align-items:flex-start}
+  .mast .when{text-align:left;white-space:normal}.verdict{grid-template-columns:1fr}
+  .brow{grid-template-columns:124px 1fr 84px;gap:8px;font-size:12.5px}
+  .brow .tag:not(.inv){display:none}
+  .callout{grid-template-columns:1fr}
+  .kv{grid-template-columns:1fr;gap:2px 0}.kv dd{margin-bottom:8px}
+  .tbl{min-width:520px}
+}
+@media print{
+  .elevated{box-shadow:none;border:1px solid var(--rule)}
+  .keyline::before{display:none}
+  .matrix{overflow:visible}
+  .matrix table{min-width:0;font-size:8pt}
+  .matrix tr,.exhibit{break-inside:avoid;page-break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<main class="sheet">
+
+<header class="mast">
+  <div>
+    <div class="kick">Enterprise DevOps Showcase · Overview &amp; Presenter Talk Track</div>
+    <h1>Azure DevOps vs. GitHub: Traceability, Agentic Review &amp; Governance</h1>
+  </div>
+  <div class="when">
+    ADO · <a href="https://dev.azure.com/org-vcinn/LifecycleTraceabilityDemo" target="_blank" rel="noopener">org-vcinn/LifecycleTraceabilityDemo</a><br>
+    GitHub · <a href="https://github.com/vijaycinn?tab=projects" target="_blank" rel="noopener">github.com/vijaycinn</a><br>
+    Verified · 19 Nov 2026
+  </div>
+</header>
+
+<nav class="toc" aria-label="Section index">
+  <a href="#parity">01 Parity</a>
+  <a href="#arch">02 Architecture</a>
+  <a href="#hierarchy">03 Hierarchy &amp; Actions</a>
+  <a href="#workflow">04 Agentic Flow</a>
+  <a href="#agentic-sec">05 Review, Runners &amp; Secrets</a>
+  <a href="#pricing">06 Pricing &amp; Licensing</a>
+  <a href="#ado-showcase">07 ADO Showcase</a>
+  <a href="#talktrack">08 Talk Track</a>
+  <a href="#refs">09 MS Learn &amp; Repos</a>
+  <a href="#enablement">10 Enablement Steps</a>
+</nav>
+
+<!-- VERDICT STRIP -->
+<section class="verdict elevated" aria-label="Executive brief">
+  <div class="vc risk">
+    <div class="st">Don't</div>
+    <p>Expect free Secret Protection on <b>personal private repos</b> like <code>copilot-skills</code>—private repos receive free Dependency Graph &amp; Dependabot, while Secret Protection requires public visibility or an Org plan.</p>
+  </div>
+  <div class="vc">
+    <div class="st">Know</div>
+    <p>Both <code>org-vcinn</code> (ADO) and <code>vijaycinn/lifecycle-traceability-demo</code> + <code>Project #2</code> (GitHub) are <b>live side-by-side</b>—and live <b>GitHub Copilot Code Review</b> just executed on ADO <code>PR #1</code> with custom rule findings.</p>
+  </div>
+  <div class="vc go keyline">
+    <div class="st">Ask</div>
+    <p><span class="lit">Use <a href="#enablement">Section 10's step-by-step checklist</a></span> to request ADO free hosted parallelism, add <code>PROJECT_PAT</code> for GitHub board sync, and optionally upgrade Copilot Free &rarr; Pro/Business on <code>vijaycinn</code>.</p>
+  </div>
+</section>
+
+<!-- 01 HEADLINE + PARITY BARS -->
+<section class="sec" id="parity">
+  <div class="sec-h">
+    <h2>Replicating LifecycleTraceabilityDemo on GitHub</h2>
+    <span class="note">Current estate vs. target parity</span>
+  </div>
+  <div class="fig">
+    <div class="big"><em>100%</em> hierarchy &amp; PR parity</div>
+    <div class="cap">Your <code>org-vcinn</code> demo (Epics #1–2, Features #3–6, Stories #7–12, Tasks #13–18, Test Run #2) can be replicated on <code>vijaycinn</code> using Sub-issues, personal Issue Types (GA Nov 2026), Projects v2, and 3 GitHub Actions workflows—with one QA caveat.</div>
+  </div>
+  <div class="bars">
+    <div class="brow go">
+      <span>4-Tier Hierarchy</span>
+      <span class="btrack"><span class="bfill" style="width:100%"><span class="tag inv">ADO Epics/Stories = GH Sub-issues (8 levels) + Issue Types</span></span></span>
+      <span class="val">Full parity</span>
+    </div>
+    <div class="brow go">
+      <span>Commit &amp; PR Traceability</span>
+      <span class="btrack"><span class="bfill" style="width:100%"><span class="tag inv">ADO AB#/Branch Policy = GH Fixes #N + Ruleset + Actions</span></span></span>
+      <span class="val">Full parity</span>
+    </div>
+    <div class="brow go">
+      <span>Agentic Code Review</span>
+      <span class="btrack"><span class="bfill" style="width:92%"><span class="tag inv">GH GA (Rulesets + Approvals) · ADO Public Preview (Comment-only)</span></span></span>
+      <span class="val">GH leads</span>
+    </div>
+    <div class="brow">
+      <span>Copilot Cloud Agent</span>
+      <span class="btrack"><span class="bfill" style="width:82%"><span class="tag inv">Issue/Board-to-PR works on GitHub Repos only</span></span></span>
+      <span class="val">GH repos only</span>
+    </div>
+    <div class="brow go">
+      <span>Secret Push Protection</span>
+      <span class="btrack"><span class="bfill" style="width:95%"><span class="tag inv">GH Secret Protection + AI Secrets · GHAzDO on Azure Repos Git</span></span></span>
+      <span class="val">Parity (Org)</span>
+    </div>
+    <div class="brow hot">
+      <span>Manual Test Plans Hub</span>
+      <span class="btrack"><span class="bfill" style="width:45%"></span><span class="tag">ADO Test Plans vs GH Issues + Actions JUnit</span></span>
+      <span class="val">ADO unique</span>
+    </div>
+    <div class="callout">
+      <span></span>
+      <span class="msg">Live check 19 Nov 2026: vijaycinn/lifecycle-traceability-demo (public) + Project #2 + 5 Issue Types + Ruleset #27660209 + Secret Protection/CodeQL are live (Meeting2Code closed). copilot-skills (private) has free Dependency Graph &amp; Dependabot enabled. org-vcinn Pipeline #1 is saved (0 MS-hosted jobs until free grant or billing link).</span>
+    </div>
+  </div>
+</section>
+
+<!-- 02 ARCHITECTURE EXHIBIT -->
+<section class="sec" id="arch">
+  <div class="sec-h">
+    <h2>Exhibit 01 · ADO vs. GitHub Traceability &amp; Hybrid Bridge</h2>
+    <span class="note">Solid = native flow · Dashed = AB# hybrid bridge</span>
+  </div>
+  <div class="exhibit elevated">
+    <div class="exhibit-kicker">
+      <span>FIG 01 · SIDE-BY-SIDE PLATFORM TOPOLOGY</span>
+      <span>ORG-VCINN (ADO) &harr; VIJAYCINN / ENTERPRISE (GITHUB)</span>
+    </div>
+    <div class="exhibit-visual">
+      <svg viewBox="0 0 980 410" role="img" aria-label="Architecture diagram comparing Azure DevOps org-vcinn (Azure Boards, Azure Repos Git with PR policy and Copilot Review, Azure Pipelines with MS-hosted or Managed DevOps Pools, and GHAzDO) against GitHub vijaycinn (Projects v2 with Issue Types and Sub-issues, GitHub Repos with Copilot Code Review and Cloud Agent, GitHub Actions hosted runners, and Secret Protection), bridged via AB# links and converging on secretless Azure OIDC/WIF deployment.">
+        <defs>
+          <marker id="arr-ink" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 1.5 L 8.5 5 L 0 8.5 z" fill="var(--ink-2)"/>
+          </marker>
+          <marker id="arr-live" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 1.5 L 8.5 5 L 0 8.5 z" fill="var(--live)"/>
+          </marker>
+          <marker id="arr-sig" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 1.5 L 8.5 5 L 0 8.5 z" fill="var(--signal)"/>
+          </marker>
+        </defs>
+
+        <!-- Track A: Azure DevOps -->
+        <rect x="14" y="14" width="738" height="162" rx="4" fill="var(--paper-2)" stroke="var(--rule-hard)" stroke-width="1.2"/>
+        <text x="26" y="33" fill="var(--ink)" font-size="10.5" font-weight="700" letter-spacing="0.9">AZURE DEVOPS · ORG-VCINN / LIFECYCLETRACEABILITYDEMO</text>
+
+        <rect x="28" y="48" width="166" height="62" rx="3" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.4"/>
+        <text x="38" y="65" fill="var(--ink-3)" font-size="9.5" font-weight="700">BOARDS &amp; TEST</text>
+        <text x="38" y="82" fill="var(--ink)" font-size="12" font-weight="700">Azure Boards</text>
+        <text x="38" y="98" fill="var(--ink-2)" font-size="10">Epic &gt; Feat &gt; Story &gt; Task</text>
+
+        <rect x="278" y="48" width="176" height="62" rx="3" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.4"/>
+        <text x="288" y="65" fill="var(--ink-3)" font-size="9.5" font-weight="700">CODE &amp; REVIEW</text>
+        <text x="288" y="82" fill="var(--ink)" font-size="12" font-weight="700">Azure Repos Git</text>
+        <text x="288" y="98" fill="var(--ink-2)" font-size="10">PR Policy + Copilot (Prev)</text>
+
+        <rect x="546" y="48" width="188" height="62" rx="3" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.4"/>
+        <text x="556" y="65" fill="var(--ink-3)" font-size="9.5" font-weight="700">CI / CD RUNNERS</text>
+        <text x="556" y="82" fill="var(--ink)" font-size="12" font-weight="700">Azure Pipelines</text>
+        <text x="556" y="98" fill="var(--ink-2)" font-size="10">MS-Hosted / Managed Pools</text>
+
+        <rect x="546" y="122" width="188" height="44" rx="3" fill="var(--signal-bg)" stroke="var(--signal)" stroke-width="1.3"/>
+        <text x="556" y="139" fill="var(--signal)" font-size="9.5" font-weight="700">GHAZDO (UNBUNDLED)</text>
+        <text x="556" y="155" fill="var(--ink)" font-size="11" font-weight="600">Secret $19 + CodeQL $30</text>
+
+        <!-- Track B: GitHub -->
+        <rect x="14" y="218" width="738" height="176" rx="4" fill="var(--live-bg)" stroke="var(--live)" stroke-width="1.3"/>
+        <text x="26" y="237" fill="var(--live)" font-size="10.5" font-weight="700" letter-spacing="0.9">GITHUB · VIJAYCINN / ENTERPRISE REPLICATION TARGET</text>
+
+        <rect x="28" y="252" width="166" height="62" rx="3" fill="var(--paper)" stroke="var(--live)" stroke-width="1.5"/>
+        <text x="38" y="269" fill="var(--live)" font-size="9.5" font-weight="700">PLANNING (GA NOV 2026)</text>
+        <text x="38" y="286" fill="var(--ink)" font-size="12" font-weight="700">GitHub Projects v2</text>
+        <text x="38" y="302" fill="var(--ink-2)" font-size="10">Issue Types + Sub-issues</text>
+
+        <rect x="278" y="252" width="176" height="62" rx="3" fill="var(--paper)" stroke="var(--live)" stroke-width="1.5"/>
+        <text x="288" y="269" fill="var(--live)" font-size="9.5" font-weight="700">AGENTIC REPO</text>
+        <text x="288" y="286" fill="var(--ink)" font-size="12" font-weight="700">GitHub Repos + PRs</text>
+        <text x="288" y="302" fill="var(--ink-2)" font-size="10">Copilot Review + Cloud Agent</text>
+
+        <rect x="546" y="252" width="188" height="62" rx="3" fill="var(--paper)" stroke="var(--live)" stroke-width="1.5"/>
+        <text x="556" y="269" fill="var(--live)" font-size="9.5" font-weight="700">CI / CD RUNNERS</text>
+        <text x="556" y="286" fill="var(--ink)" font-size="12" font-weight="700">GitHub Actions</text>
+        <text x="556" y="302" fill="var(--ink-2)" font-size="10">Hosted / Larger + VNet</text>
+
+        <rect x="546" y="330" width="188" height="50" rx="3" fill="var(--signal-bg)" stroke="var(--signal)" stroke-width="1.3"/>
+        <text x="556" y="348" fill="var(--signal)" font-size="9.5" font-weight="700">GITHUB SECURITY</text>
+        <text x="556" y="365" fill="var(--ink)" font-size="11" font-weight="600">Push Prot + AI Secrets + CodeQL</text>
+
+        <!-- Shared Target: Azure -->
+        <rect x="794" y="148" width="172" height="106" rx="4" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.6"/>
+        <text x="806" y="170" fill="var(--live)" font-size="9.5" font-weight="700">SHARED CLOUD TARGET</text>
+        <text x="806" y="191" fill="var(--ink)" font-size="13" font-weight="700">Azure Workloads</text>
+        <text x="806" y="210" fill="var(--ink-2)" font-size="10.5">Container Apps / AKS</text>
+        <text x="806" y="227" fill="var(--ink-2)" font-size="10.5">Secretless OIDC / WIF</text>
+        <text x="806" y="242" fill="var(--ink-3)" font-size="9.5">Zero stored SPN keys</text>
+
+        <!-- ADO Flow Arrows -->
+        <line x1="194" y1="79" x2="275" y2="79" stroke="var(--ink-2)" stroke-width="1.5" marker-end="url(#arr-ink)"/>
+        <text x="200" y="71" fill="var(--ink-2)" font-size="9.5">Linked WI</text>
+        <line x1="454" y1="79" x2="543" y2="79" stroke="var(--ink-2)" stroke-width="1.5" marker-end="url(#arr-ink)"/>
+        <text x="462" y="71" fill="var(--ink-2)" font-size="9.5">PR Policy</text>
+        <line x1="640" y1="110" x2="640" y2="120" stroke="var(--signal)" stroke-width="1.4" marker-end="url(#arr-sig)"/>
+        <path d="M 734 79 L 880 79 L 880 145" fill="none" stroke="var(--ink)" stroke-width="1.6" marker-end="url(#arr-ink)"/>
+        <text x="772" y="71" fill="var(--ink)" font-size="9.5" font-weight="600">ADO WIF</text>
+
+        <!-- GitHub Flow Arrows -->
+        <line x1="194" y1="283" x2="275" y2="283" stroke="var(--live)" stroke-width="1.6" marker-end="url(#arr-live)"/>
+        <text x="200" y="275" fill="var(--live)" font-size="9.5" font-weight="600">Fixes #N</text>
+        <line x1="454" y1="283" x2="543" y2="283" stroke="var(--live)" stroke-width="1.6" marker-end="url(#arr-live)"/>
+        <text x="462" y="275" fill="var(--live)" font-size="9.5" font-weight="600">Rulesets</text>
+        <line x1="640" y1="314" x2="640" y2="327" stroke="var(--signal)" stroke-width="1.4" marker-end="url(#arr-sig)"/>
+        <path d="M 734 283 L 880 283 L 880 257" fill="none" stroke="var(--live)" stroke-width="1.8" marker-end="url(#arr-live)"/>
+        <text x="772" y="275" fill="var(--live)" font-size="9.5" font-weight="600">OIDC Token</text>
+
+        <!-- Hybrid Bridge -->
+        <path d="M 111 110 L 111 198 L 366 198 L 366 249" fill="none" stroke="var(--live)" stroke-width="1.6" stroke-dasharray="5 3" marker-end="url(#arr-live)"/>
+        <rect x="168" y="187" width="166" height="20" rx="2" fill="var(--paper)"/>
+        <text x="174" y="201" fill="var(--live)" font-size="9.5" font-weight="700">AB# + Cloud Agent (GA)</text>
+      </svg>
+    </div>
+    <div class="exhibit-cap"><b>Architecture takeaway.</b> Enterprises do not face an all-or-nothing migration: keep Azure Boards + Test Plans for PMO/QA governance while adopting GitHub Repos + Cloud Agent via <code>AB#</code>, or replicate the full 4-tier hierarchy natively inside GitHub Projects v2 + Sub-issues.</div>
+  </div>
+</section>
+
+<!-- 03 HIERARCHY & TRACEABILITY MATRIX -->
+<section class="sec" id="hierarchy">
+  <div class="sec-h">
+    <h2>Hierarchy, commit traceability &amp; GitHub Actions mapping</h2>
+    <span class="note">org-vcinn &rarr; vijaycinn exact equivalents</span>
+  </div>
+  <div class="matrix">
+    <table>
+      <thead>
+        <tr>
+          <th>Capability</th>
+          <th>Azure DevOps (<code>org-vcinn</code>)</th>
+          <th>GitHub Equivalent (<code>vijaycinn</code> / Enterprise)</th>
+          <th>Actions / Config Nuance</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th>4-Tier Work Hierarchy</th>
+          <td>Inherited Agile: <code>Epic &rarr; Feature &rarr; User Story (PBI) &rarr; Task / Bug</code>. Never nest same-type items.</td>
+          <td><strong>Sub-issues</strong> (GA: up to <strong>8 levels</strong>, 100 children/parent, cross-repo) + <strong>Issue Types</strong> (GA for personal accounts <code>2026-11-11</code>: up to 25 types).</td>
+          <td>Create custom types <code>Epic</code> &amp; <code>User Story</code> in Profile Settings &rarr; Planning; group Projects v2 by <code>Parent issue</code> + <code>Sub-issues progress</code>.</td>
+        </tr>
+        <tr>
+          <th>Custom PPM / Sync Fields</th>
+          <td>Inherited fields: <code>Clarity Project ID</code>, <code>Clarity Task ID</code>, <code>Sync Status</code>, <code>Exported Hours</code>, <code>External Incident ID</code>.</td>
+          <td><strong>User/Org Issue Fields</strong> (up to 25: text, number, date, single/multi-select) + <strong>Project v2 Fields</strong> (up to 50 total).</td>
+          <td>Issue Fields don't pre-fill from Issue Templates; populate via UI, Projects v2 table, GraphQL, or <code>actions/github-script</code>.</td>
+        </tr>
+        <tr>
+          <th>Commit &amp; PR Traceability</th>
+          <td>Branch Policy <code>Check for linked work items = Required</code>; <code>Fixes AB#7</code> / <code>Closed AB#7</code> in PR desc or commit.</td>
+          <td><code>Fixes #N</code>, <code>Closes #N</code>, <code>Resolves #N</code> (honored on <strong>default branch PRs</strong>); <code>Refs #N</code> for non-closing link.</td>
+          <td>Replicate ADO's required-link gate with a small <strong>GitHub Actions PR-check</strong> workflow + <strong>Ruleset</strong> requiring that status check.</td>
+        </tr>
+        <tr>
+          <th>Project &amp; Board Automation</th>
+          <td><code>workitem.updated</code> Service Hook &rarr; Logic App; WIT state auto-transitions on PR merge.</td>
+          <td><strong>Projects v2 built-in workflows</strong> (auto-add, item closed &rarr; Done) + <code>actions/add-to-project</code> + <code>gh-aw</code> triage.</td>
+          <td class="is-risk"><strong>Critical:</strong> <code>GITHUB_TOKEN</code> cannot access Projects v2. Use a <strong>PAT</strong> (personal user projects) or <strong>GitHub App</strong> (orgs).</td>
+        </tr>
+        <tr>
+          <th>QA / Test Traceability</th>
+          <td><code>TestedBy</code> Test Case links + Web Test Runner + <strong>Test Run #2</strong> (4 Pass, 1 Fail &rarr; Bug <code>#19</code>).</td>
+          <td class="is-risk"><strong>No native Test Plans hub.</strong> Model manual tests as <code>Test Case</code> Issues linked via <code>Blocked by</code> / Sub-issues.</td>
+          <td>Run automated tests in GitHub Actions (<code>vitest</code>/<code>junit</code> + step summary) and auto-create/link Bug issues on failure.</td>
+        </tr>
+        <tr>
+          <th>Hybrid Boards &harr; GitHub</th>
+          <td>Connect via <strong>Azure Boards GitHub App</strong> (up to <strong>2,000</strong> repos/connection).</td>
+          <td><code>AB#{ID}</code> in GitHub commit messages, PR descriptions, or Issue descriptions links back to ADO work items.</td>
+          <td class="is-risk"><code>AB#</code> in PR <strong>titles</strong> or <strong>comments</strong> does NOT link. Multi-item <code>Fixes AB#1, AB#2</code> transitions only the first item.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="faq" style="margin-top:12px">
+    <details>
+      <summary><span>Starter GitHub Actions: Enforce Issue Link on PRs + Auto-Add Issues to <code>vijaycinn</code> Project v2</span> <span class="qtag">Copy-Paste YAML</span></summary>
+      <div class="faq-a">
+        <p><strong>1. Enforce <code>Fixes #N</code> / <code>Refs #N</code> / <code>AB#N</code> on PRs (pair with a Branch Ruleset required check):</strong></p>
+        <pre class="codeblock">name: PR Traceability Gate
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+jobs:
+  require-issue-link:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const body = context.payload.pull_request.body || '';
+            const hasLink = /((close[sd]?|fix(e[sd])?|resolve[sd]?|refs)\s+#\d+|AB#\d+)/i.test(body);
+            if (!hasLink) core.setFailed('PR description must reference an issue (e.g., Fixes #12, Refs #12, or AB#7).');</pre>
+        <p><strong>2. Auto-add Issues &amp; PRs to a personal <code>vijaycinn</code> Project v2 (use a repo secret <code>PROJECT_PAT</code> with <code>project</code> scope):</strong></p>
+        <pre class="codeblock">name: Sync to Project Board
+on:
+  issues: { types: [opened] }
+  pull_request: { types: [opened] }
+jobs:
+  add-to-project:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/add-to-project@v1.0.2
+        with:
+          project-url: https://github.com/users/vijaycinn/projects/2
+          github-token: ${{ secrets.PROJECT_PAT }}</pre>
+      </div>
+    </details>
+  </div>
+</section>
+
+<!-- 04 AGENTIC WORKFLOW EXHIBIT -->
+<section class="sec" id="workflow">
+  <div class="sec-h">
+    <h2>Exhibit 02 · Agentic Code Review, Secret Protection &amp; OIDC Pipeline</h2>
+    <span class="note">Shift-left guardrails + federated delivery</span>
+  </div>
+  <div class="exhibit">
+    <div class="exhibit-kicker">
+      <span>FIG 02 · END-TO-END AGENTIC DEVOPS LIFECYCLE</span>
+      <span>COPILOT CLOUD AGENT + PUSH PROTECTION + OIDC</span>
+    </div>
+    <div class="exhibit-visual">
+      <svg viewBox="0 0 980 355" role="img" aria-label="Swimlane workflow showing Planning and Intent (Work Item or Sub-issue -> Human Approval -> Traceability Sync), Agentic Dev and Review (Copilot Cloud Agent -> Copilot Code Review), Security and Policy Gates (Pre-receive Push Protection with secret-detected Block path), and Runners and Cloud Delivery (Cloud Runner executing CodeQL -> Azure OIDC Deploy).">
+        <defs>
+          <marker id="w-arr" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 1.5 L 8.5 5 L 0 8.5 z" fill="var(--ink-2)"/>
+          </marker>
+          <marker id="w-live" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 1.5 L 8.5 5 L 0 8.5 z" fill="var(--live)"/>
+          </marker>
+          <marker id="w-sig" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 1.5 L 8.5 5 L 0 8.5 z" fill="var(--signal)"/>
+          </marker>
+        </defs>
+
+        <!-- Lane Backgrounds -->
+        <rect x="10" y="10" width="960" height="76" rx="3" fill="var(--paper-2)" stroke="var(--rule)"/>
+        <text x="20" y="26" fill="var(--ink-3)" font-size="9.5" font-weight="700" letter-spacing="0.8">1 · PLANNING &amp; INTENT</text>
+
+        <rect x="10" y="96" width="960" height="76" rx="3" fill="var(--live-bg)" stroke="var(--rule)"/>
+        <text x="20" y="112" fill="var(--live)" font-size="9.5" font-weight="700" letter-spacing="0.8">2 · AGENTIC DEV &amp; REVIEW</text>
+
+        <rect x="10" y="182" width="960" height="76" rx="3" fill="var(--signal-bg)" stroke="var(--rule)"/>
+        <text x="20" y="198" fill="var(--signal)" font-size="9.5" font-weight="700" letter-spacing="0.8">3 · SECURITY &amp; POLICY GATES</text>
+
+        <rect x="10" y="268" width="960" height="76" rx="3" fill="var(--paper-2)" stroke="var(--rule)"/>
+        <text x="20" y="284" fill="var(--ink-3)" font-size="9.5" font-weight="700" letter-spacing="0.8">4 · CLOUD RUNNERS &amp; OIDC DELIVERY</text>
+
+        <!-- Lane 1 Nodes -->
+        <rect x="28" y="34" width="150" height="44" rx="3" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.3"/>
+        <text x="38" y="53" fill="var(--ink)" font-size="11.5" font-weight="700">Work Item / Issue</text>
+        <text x="38" y="68" fill="var(--ink-2)" font-size="9.5">AB#ID or Sub-issue</text>
+
+        <rect x="610" y="34" width="156" height="44" rx="3" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.3"/>
+        <text x="620" y="53" fill="var(--ink)" font-size="11.5" font-weight="700">Human Gate</text>
+        <text x="620" y="68" fill="var(--ink-2)" font-size="9.5">CODEOWNERS + Env Sign-off</text>
+
+        <rect x="804" y="34" width="152" height="44" rx="3" fill="var(--paper)" stroke="var(--live)" stroke-width="1.5"/>
+        <text x="814" y="53" fill="var(--live)" font-size="11.5" font-weight="700">Traceability Sync</text>
+        <text x="814" y="68" fill="var(--ink-2)" font-size="9.5">Fixes #N / AB# Auto-Close</text>
+
+        <!-- Lane 2 Nodes -->
+        <rect x="210" y="120" width="164" height="44" rx="3" fill="var(--paper)" stroke="var(--live)" stroke-width="1.5"/>
+        <text x="220" y="139" fill="var(--live)" font-size="11.5" font-weight="700">Copilot Cloud Agent</text>
+        <text x="220" y="154" fill="var(--ink-2)" font-size="9.5">copilot-setup-steps.yml</text>
+
+        <rect x="424" y="120" width="164" height="44" rx="3" fill="var(--paper)" stroke="var(--live)" stroke-width="1.5"/>
+        <text x="434" y="139" fill="var(--live)" font-size="11.5" font-weight="700">Copilot Code Review</text>
+        <text x="434" y="154" fill="var(--ink-2)" font-size="9.5">Ruleset / ADO PR Policy</text>
+
+        <!-- Lane 3 Nodes -->
+        <rect x="210" y="206" width="164" height="44" rx="3" fill="var(--paper)" stroke="var(--signal)" stroke-width="1.5"/>
+        <text x="220" y="225" fill="var(--signal)" font-size="11.5" font-weight="700">Push Protection</text>
+        <text x="220" y="240" fill="var(--ink-2)" font-size="9.5">Regex + AI Secret Scan</text>
+
+        <rect x="424" y="206" width="164" height="44" rx="3" fill="var(--paper)" stroke="var(--signal)" stroke-width="1.5" stroke-dasharray="4 3"/>
+        <text x="434" y="225" fill="var(--signal)" font-size="11.5" font-weight="700">Push Blocked</text>
+        <text x="434" y="240" fill="var(--ink-2)" font-size="9.5">Bypass logs audit alert</text>
+
+        <!-- Lane 4 Nodes -->
+        <rect x="610" y="292" width="156" height="44" rx="3" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.4"/>
+        <text x="620" y="311" fill="var(--ink)" font-size="11.5" font-weight="700">Cloud Runner</text>
+        <text x="620" y="326" fill="var(--ink-2)" font-size="9.5">Hosted / MDP + CodeQL</text>
+
+        <rect x="804" y="292" width="152" height="44" rx="3" fill="var(--paper)" stroke="var(--live)" stroke-width="1.5"/>
+        <text x="814" y="311" fill="var(--live)" font-size="11.5" font-weight="700">Azure OIDC Deploy</text>
+        <text x="814" y="326" fill="var(--ink-2)" font-size="9.5">Immutable sub + Env Gate</text>
+
+        <!-- Edges -->
+        <path d="M 103 78 L 103 142 L 207 142" fill="none" stroke="var(--live)" stroke-width="1.6" marker-end="url(#w-live)"/>
+        <text x="110" y="135" fill="var(--live)" font-size="9">assign</text>
+
+        <line x1="292" y1="164" x2="292" y2="203" stroke="var(--signal)" stroke-width="1.6" marker-end="url(#w-sig)"/>
+        <text x="299" y="191" fill="var(--signal)" font-size="9">git push</text>
+
+        <line x1="374" y1="228" x2="421" y2="228" stroke="var(--signal)" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#w-sig)"/>
+        <text x="378" y="221" fill="var(--signal)" font-size="9">secret</text>
+
+        <path d="M 374 214 L 398 214 L 398 142 L 421 142" fill="none" stroke="var(--live)" stroke-width="1.6" marker-end="url(#w-live)"/>
+        <text x="403" y="177" fill="var(--live)" font-size="9">clean</text>
+
+        <path d="M 588 134 L 688 134 L 688 81" fill="none" stroke="var(--ink-2)" stroke-width="1.4" stroke-dasharray="4 3" marker-end="url(#w-arr)"/>
+        <text x="615" y="128" fill="var(--ink-2)" font-size="9">findings</text>
+
+        <path d="M 588 152 L 596 152 L 596 314 L 607 314" fill="none" stroke="var(--live)" stroke-width="1.6" marker-end="url(#w-live)"/>
+
+        <path d="M 766 56 L 784 56 L 784 306 L 801 306" fill="none" stroke="var(--ink-2)" stroke-width="1.4" marker-end="url(#w-arr)"/>
+        <text x="722" y="266" fill="var(--ink-2)" font-size="9">approve</text>
+
+        <line x1="766" y1="314" x2="801" y2="314" stroke="var(--live)" stroke-width="1.8" marker-end="url(#w-live)"/>
+        <text x="769" y="330" fill="var(--live)" font-size="9">OIDC</text>
+
+        <line x1="880" y1="292" x2="880" y2="81" stroke="var(--live)" stroke-width="1.6" marker-end="url(#w-live)"/>
+        <text x="886" y="191" fill="var(--live)" font-size="9">auto-close</text>
+      </svg>
+    </div>
+    <div class="exhibit-cap"><b>Control plane note.</b> Push protection fires <em>before</em> code hits the remote branch; Copilot Code Review runs against custom repo instructions; cloud runners execute CodeQL and deploy via secretless OIDC (<code>api://AzureADTokenExchange</code>).</div>
+  </div>
+</section>
+
+<!-- 05 AGENTIC CODE REVIEW, RUNNERS & SECRETS -->
+<section class="sec" id="agentic-sec">
+  <div class="sec-h">
+    <h2>Agentic code review, cloud runners &amp; secret checks</h2>
+    <span class="note">What works in org-vcinn vs. GitHub today</span>
+  </div>
+  <div class="matrix">
+    <table>
+      <thead>
+        <tr>
+          <th>Enterprise Pillar</th>
+          <th>Azure DevOps (<code>org-vcinn</code>)</th>
+          <th>GitHub (<code>vijaycinn</code> / Enterprise)</th>
+          <th>Key Caveat for Customer Demo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th>Copilot Code Review</th>
+          <td><strong>Public Preview (Sprint 279, no signup)</strong> natively on <strong>Azure Repos Git</strong>. Enable at Org/Project/Repo + branch policy <em>Automatically request Copilot code review</em>. Instructions in <code>.github/</code> or <code>.azuredevops/</code>.</td>
+          <td><strong>GA</strong> on GitHub.com, CLI &amp; IDEs. Auto-request via <strong>Rulesets</strong> (incl. new pushes &amp; draft PRs). Effort levels: Lite (~$0.25), Balanced (~$1.50), Max (~$10 prev). <strong>Copilot approvals</strong> in public preview.</td>
+          <td class="is-risk">ADO Copilot review is <strong>comment-only</strong> (cannot satisfy required reviewers), ignores new pushes, bills Azure meter (<code>$0.01/credit</code>), and reads instructions from <strong>target branch</strong> (GitHub reads <strong>head branch</strong>).</td>
+        </tr>
+        <tr>
+          <th>Copilot Cloud Agent</th>
+          <td><strong>Azure Boards &rarr; Copilot (GA):</strong> click <em>Create a PR with GitHub Copilot</em> on a Story/Task. Uses custom GitHub agents (Sprint 269).</td>
+          <td><strong>GA</strong> (renamed <em>Copilot cloud agent</em>): assign an Issue to <code>Copilot</code>; customize env via <code>.github/workflows/copilot-setup-steps.yml</code>; <em>Watch &amp; fix</em> Agent Merge (Oct 2026).</td>
+          <td class="is-risk">Azure Boards &rarr; Cloud Agent works <strong>only on connected GitHub repos</strong> (Azure Repos unsupported except GHAzDO <em>Agentic Autofix</em> for security alerts).</td>
+        </tr>
+        <tr>
+          <th>Cloud Runners &amp; Networking</th>
+          <td><strong>MS-hosted</strong> (<code>ubuntu-latest</code>, <code>windows-latest</code>) + <strong>Managed DevOps Pools (GA)</strong> in Azure (VNet injection or up to 16 static outbound IPs).</td>
+          <td><strong>Standard hosted runners</strong> + <strong>Larger runners</strong> (Team/GHEC: 4–96 vCPU, GPU, static IPs, OR Azure VNet private networking).</td>
+          <td>Live in <code>org-vcinn</code>: <code>azure-pipelines.yml</code> (<code>vmImage: ubuntu-latest</code>) is committed, but <strong>0</strong> pipeline runs/definitions exist, MS-hosted parallel jobs = <strong>0</strong>, self-hosted = <strong>1 free (0 agents)</strong>, GitHub-hosted agents = <strong>Off</strong>, and <strong>0</strong> Managed DevOps Pools exist in MCAP sub <code>941e8603</code>. On GitHub, <strong>VNet &amp; static IPs cannot combine</strong>.</td>
+        </tr>
+        <tr>
+          <th>Secret Scanning &amp; Push Protection</th>
+          <td><strong>GHAzDO Secret Protection</strong> (<code>$19/committer/mo</code>): native push protection + repo scan on Azure Repos Git. Bypass via <code>skip-secret-scanning:true</code> logs an alert.</td>
+          <td><strong>GitHub Secret Protection</strong> (<code>$19/committer/mo</code>, <strong>free on public repos</strong>): full history + Issues/PRs/Wikis + Push Protection + <strong>AI-detected secrets (prev)</strong> + validity checks + delegated bypass.</td>
+          <td class="is-risk"><code>vijaycinn</code> personal <strong>private</strong> repos do NOT get Secret Protection (requires public repo, Org, or EMU). GHAzDO does <strong>not</strong> detect generic passwords like <code>password123</code>.</td>
+        </tr>
+        <tr>
+          <th>Enterprise Governance &amp; OIDC</th>
+          <td>Branch policies, Pipeline Approvals &amp; Checks, <strong>Workload Identity Federation</strong> service connections, Audit Log streaming.</td>
+          <td>Org/Repo <strong>Rulesets</strong>, <code>CODEOWNERS</code>, Environments with approval gates (GHEC private), immutable repo-ID OIDC <code>sub</code> claims (post-Jul 2026), Audit Log API.</td>
+          <td>Both support secretless Azure deployments via <code>api://AzureADTokenExchange</code>—never store client secrets in pipelines or Actions.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- 06 PRICING & LICENSING -->
+<section class="sec" id="pricing">
+  <div class="sec-h">
+    <h2>Pricing &amp; licensing comparison (verified 19 Nov 2026)</h2>
+    <span class="note">Official Azure &amp; GitHub rate cards · USD</span>
+  </div>
+  <div class="matrix">
+    <table>
+      <thead>
+        <tr>
+          <th>Dimension</th>
+          <th>Azure DevOps Services</th>
+          <th>GitHub Platform &amp; Add-ons</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th>Core Seats</th>
+          <td><strong>Stakeholder:</strong> Free (partial Boards, no private Repos)<br><strong>Basic:</strong> 5 free, then <strong>$6/user/mo</strong> (included free with VS Pro &amp; <strong>GitHub Enterprise Cloud</strong>!)<br><strong>Basic + Test Plans:</strong> <strong>$52/user/mo</strong> (included with VS Enterprise)</td>
+          <td><strong>Free:</strong> $0 (public/private repos, Projects v2 included; Rulesets/CODEOWNERS public-only)<br><strong>Team:</strong> <strong>$4/user/mo</strong> (private Rulesets &amp; CODEOWNERS)<br><strong>Enterprise Cloud:</strong> <strong>$21/user/mo</strong> (EMU, SAML/SCIM, Env Protection Rules on private repos, FedRAMP Tailored ATO, includes ADO Basic)</td>
+        </tr>
+        <tr>
+          <th>Cloud Runners (CI/CD)</th>
+          <td><strong>MS-hosted:</strong> 1 free job (1,800 min/mo, 60-min cap); extra unlimited job <strong>$40/mo</strong><br><strong>Self-hosted:</strong> 1 free (+1/VS Ent); extra <strong>$15/mo</strong><br><strong>Managed DevOps Pools:</strong> Azure compute/storage + $15/extra job<br><span class="is-risk">Public projects retiring 2026–2027 (lose unlimited free mins).</span></td>
+          <td><strong>Included Actions compute/mo:</strong> Free <strong>$12</strong> (~2,000 Linux mins) · Team <strong>$18</strong> (~3,000 mins) · Enterprise <strong>$300</strong> (~50,000 mins). Free on public repos.<br><strong>Standard rates:</strong> Linux 2-core <code>$0.006/min</code> · Windows 2-core <code>$0.010/min</code> · macOS <code>$0.062/min</code>. Larger runners billed even on public repos.</td>
+        </tr>
+        <tr>
+          <th>Copilot &amp; AI Credits</th>
+          <td><strong>Copilot Code Review in AzDO:</strong> Announced <strong>GA Nov 17, 2026</strong> (DevOps Blog); MS Learn release notes/roadmap still label <strong>Public Preview</strong>. Billed in GitHub AI Credits (<strong>$0.01/credit</strong>) to linked Azure sub (<code>GitHub Copilot for AzDO</code>, 48h portal lag). GitHub seat credits do NOT apply. Requires Basic access. Reference averages: Lite <code>~$0.25</code> (~25 credits) · Balanced <code>~$1.50</code> (~150) · Max <code>~$10</code> (~1,000).</td>
+          <td><strong>Pro:</strong> $10/mo (1,500 credits) · <strong>Pro+:</strong> $39/mo (7,000) · <strong>Max:</strong> $100/mo (20,000)<br><strong>Business:</strong> <strong>$19/seat/mo</strong> (1,900 pooled credits/user)<br><strong>Enterprise:</strong> <strong>$39/seat/mo</strong> (3,900 pooled credits/user)<br><strong>Copilot Access (Oct 2026):</strong> $0 seat on GHEC, metered from credit 1. Review avg: Lite ~$0.25 (~25 credits), Balanced ~$1.50 (~150), Max ~$10 (~1,000) + Actions mins.</td>
+        </tr>
+        <tr>
+          <th>Secret &amp; Code Security</th>
+          <td><strong>Unbundled (Sprint 257+ for new customers):</strong><br>Secret Protection: <strong>$19/active committer/mo</strong><br>Code Security: <strong>$30/active committer/mo</strong><br><em>(90-day push window, deduplicated per Azure sub; legacy $49 bundle deprecated for new buyers.)</em></td>
+          <td><strong>GitHub Secret Protection:</strong> <strong>$19/active committer/mo</strong><br><strong>GitHub Code Security:</strong> <strong>$30/active committer/mo</strong><br><strong>Public repos:</strong> Free secret scanning, push protection, CodeQL &amp; classic Autofix.<br><strong>Private org repos:</strong> Free risk assessment reports; ongoing alerts &amp; AI scan credits require license.</td>
+        </tr>
+        <tr>
+          <th>EA &amp; Public Sector Billing</th>
+          <td>Meters (Basic, Test Plans, GHAzDO, Copilot AzDO) bill directly on the linked Azure subscription; US Gov available via LSP or PAYG.</td>
+          <td>Under Microsoft EA, <strong>linking an Azure subscription is mandatory</strong> to meter GHAS, Copilot, or Actions overages (requires tenant-wide admin consent).</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="faq" style="margin-top:14px">
+    <details open>
+      <summary><span>1. Is Copilot Code Review in Azure DevOps GA or Public Preview?</span> <span class="qtag">Release Status</span></summary>
+      <p class="faq-a">Microsoft's <a href="https://devblogs.microsoft.com/devops/azure-devops-and-github-start-your-agentic-journey-where-you-are/" target="_blank" rel="noopener">Nov 17, 2026 DevOps Blog</a> announced that <em>"Copilot Code Review for Azure DevOps is now generally available."</em> However, as of <code>2026-11-19</code>, Microsoft Learn's Sprint 279–281 release notes and <a href="https://learn.microsoft.com/en-us/azure/devops/release-notes/features-timeline" target="_blank" rel="noopener">Features Timeline</a> (<code>ms.date 2026-11-06</code>) still label it <strong>Public Preview</strong>, and Sprint 282 (<code>2026-11-17</code>) has no GA line item yet. Frame it honestly to customers as announced GA Nov 17, 2026 while Learn release notes catch up.</p>
+    </details>
+    <details>
+      <summary><span>2. How many AI credits does each Azure DevOps code review consume?</span> <span class="qtag">Credits &amp; Effort</span></summary>
+      <p class="faq-a">Azure DevOps docs publish no fixed ADO credit table—each completed review meters input, output, and cached tokens at <strong>1 GitHub AI credit = $0.01 USD</strong> using an undisclosed model, and <a href="https://learn.microsoft.com/en-us/azure/devops/repos/git/copilot-code-reviews?view=azure-devops" target="_blank" rel="noopener">defers to GitHub's reference ranges</a>: <strong>Lite</strong> <code>$0.05–$1</code> (avg <strong>~$0.25</strong> &asymp; 25 credits), <strong>Balanced</strong> <code>$0.25–$5</code> (avg <strong>~$1.50</strong> &asymp; 150 credits), and <strong>Max</strong> <code>$1.50–$25</code> (avg <strong>~$10</strong> &asymp; 1,000 credits). Note that ADO Sprint 280 names <code>Lite</code>/<code>Balanced</code> while Learn screenshots show <code>Low</code>/<code>Medium</code>/<code>High</code>; actual consumption scales with PR diff size and custom instructions. Whether cancelled/failed reviews incur partial token charges is undocumented.</p>
+    </details>
+    <details>
+      <summary><span>3. How do we estimate monthly AzDO review costs and prevent runaway spend?</span> <span class="qtag">Cost Estimation</span></summary>
+      <p class="faq-a"><strong>Microsoft's official method:</strong> enable on 1–2 pilot repos, compare effort levels, and monitor daily usage in Azure Cost Management under <code>GitHub</code> &rarr; <code>GitHub Copilot for AzDO</code> (grouped by <code>_organizationname_</code> / <code>_projectname_</code>; <strong>48-hour lag</strong>).<br><strong>Planning formula:</strong> <code>Monthly Cost &asymp; Active PRs/mo &times; (1 + Manual Re-reviews/PR) &times; Avg Cost at Effort Level</code> (e.g., 500 PRs &times; 1.5 reviews &times; $1.50 Balanced &asymp; <strong>$1,125/mo</strong> vs. <strong>~$188/mo</strong> at Lite).<br><strong>Critical spend warning:</strong> Azure budgets <strong>alert only—they do NOT stop reviews</strong> (unlike GitHub.com budgets). Control cost by locking Project default effort to Lite/Balanced, keeping automatic review branch policies off on noisy repos, and capping PR eligibility (<code>&le;10 GB</code> repo, <code>&le;100</code> files/changes, <code>1</code> completed review per merge commit, no auto re-review on new pushes).</p>
+    </details>
+    <details>
+      <summary><span>4. Do GitHub Copilot Business/Enterprise seat credits apply to Azure DevOps reviews?</span> <span class="qtag">Licensing</span></summary>
+      <p class="faq-a"><strong>No.</strong> Per the <a href="https://learn.microsoft.com/en-us/azure/devops/repos/git/copilot-code-reviews-faq?view=azure-devops" target="_blank" rel="noopener">MS Learn FAQ</a>, <em>"usage in Azure DevOps doesn't use AI credits from GitHub Copilot plans."</em> All AzDO Copilot reviews bill strictly to the linked Azure subscription—even for users who already hold GitHub Copilot Business (<code>$19</code>) or Enterprise (<code>$39</code>) seats. Users also need at least ADO <strong>Basic</strong> access (Stakeholders have no Azure Repos access in private projects).</p>
+    </details>
+    <details>
+      <summary><span>5. Can Copilot block merges, run on self-hosted agents, or honor ADO EU data residency?</span> <span class="qtag">Governance Limits</span></summary>
+      <p class="faq-a"><strong>No to all three today:</strong> (1) Copilot always posts a <strong>Comment</strong> review (cannot approve or satisfy required reviewers; formal PR Approval + File Exclusions are on the <code>2027 Q1</code> roadmap); (2) supported runners are Microsoft-hosted <code>Azure Pipelines</code> or <strong>Managed DevOps Pools</strong> (self-hosted agents are unsupported, TFVC is unsupported, and failed review JSON logs appear under the default <code>Azure Pipelines</code> pool); (3) Copilot processing does <strong>not</strong> follow ADO org data residency (e.g., an EU org may be processed in the US), though customer code is not used to train foundation models.</p>
+    </details>
+  </div>
+</section>
+
+<!-- 07 AZURE DEVOPS LIVE SHOWCASE & SIMULATED COPILOT REVIEW -->
+<section class="sec" id="ado-showcase">
+  <div class="sec-h">
+    <h2>Azure DevOps (<code>org-vcinn</code>) live showcase &amp; Copilot code review</h2>
+    <span class="note">Live links + Sprint 279 Public Preview walkthrough</span>
+  </div>
+
+  <div class="seq">
+    <div class="sq">
+      <div class="n">01 · OVERVIEW</div>
+      <div class="t">Dashboard &amp; Tree</div>
+      <p>Expand Epic <code>#1 &rarr; Feature #3 &rarr; Story #7 &rarr; Task #13</code> on <a href="https://dev.azure.com/org-vcinn/LifecycleTraceabilityDemo/_dashboards/dashboard/6e0b6efe-fba4-49d1-ad95-13574c6d0ec2" target="_blank" rel="noopener">Dashboard</a> &amp; <a href="https://dev.azure.com/org-vcinn/LifecycleTraceabilityDemo/_queries/query/de7a5487-47e7-484a-b327-3231e8c6cabf/" target="_blank" rel="noopener">Tree Query &rarr;</a></p>
+    </div>
+    <div class="sq">
+      <div class="n">02 · PORTFOLIO</div>
+      <div class="t">Clarity &rarr; Epics</div>
+      <p>Show <code>PRJ-4102</code> / <code>TSK-101</code> mapping on <a href="https://dev.azure.com/org-vcinn/LifecycleTraceabilityDemo/_workitems/edit/1" target="_blank" rel="noopener">Epic #1</a>, <a href="https://dev.azure.com/org-vcinn/LifecycleTraceabilityDemo/_backlogs/backlog/LifecycleTraceabilityDemo%20Team/Epics" target="_blank" rel="noopener">Epics Backlog</a> &amp; <a href="https://dev.azure.com/org-vcinn/LifecycleTraceabilityDemo/_deliveryplans/plans" target="_blank" rel="noopener">Delivery Plans &rarr;</a></p>
+    </div>
+    <div class="sq">
+      <div class="n">03 · SPRINT + QA</div>
+      <div class="t">Story #7 &amp; Run #2</div>
+      <p>Show <a href="https://dev.azure.com/org-vcinn/LifecycleTraceabilityDemo/_workitems/edit/7" target="_blank" rel="noopener">Story #7</a> on <a href="https://dev.azure.com/org-vcinn/LifecycleTraceabilityDemo/_boards/board/t/LifecycleTraceabilityDemo%20Team/Stories" target="_blank" rel="noopener">Sprint Board</a> plus <a href="https://dev.azure.com/org-vcinn/LifecycleTraceabilityDemo/_TestManagement/Runs?runId=2&_a=runCharts" target="_blank" rel="noopener">Test Run #2</a> (<code>80%</code> pass; <code>TC-002 &rarr; Bug #19</code>).</p>
+    </div>
+    <div class="sq">
+      <div class="n">04 · CODE + REVIEW</div>
+      <div class="t">PR #1, PR #5 &amp; MCP</div>
+      <p>Show <a href="https://dev.azure.com/org-vcinn/LifecycleTraceabilityDemo/_git/LifecycleTraceabilityDemo/pullrequest/1" target="_blank" rel="noopener">PR #1</a>, <a href="https://dev.azure.com/org-vcinn/LifecycleTraceabilityDemo/_git/LifecycleTraceabilityDemo/pullrequest/5" target="_blank" rel="noopener">PR #5</a> (Copilot policy trace), <a href="https://dev.azure.com/org-vcinn/LifecycleTraceabilityDemo/_build?definitionId=1" target="_blank" rel="noopener">Pipeline #1</a> &amp; <code>.vscode/mcp.json</code>.</p>
+    </div>
+    <div class="sq">
+      <div class="n">05 · INTEGRATE</div>
+      <div class="t">Time Sync &amp; Hooks</div>
+      <p>Show <a href="https://dev.azure.com/org-vcinn/LifecycleTraceabilityDemo/_workitems/edit/11" target="_blank" rel="noopener">Story #11</a> (<code>Bug #20 INC0049281</code>), <a href="https://dev.azure.com/org-vcinn/LifecycleTraceabilityDemo/_settings/serviceHooks" target="_blank" rel="noopener">Service Hooks</a> &amp; <a href="https://dev.azure.com/org-vcinn/_settings/process" target="_blank" rel="noopener">Inherited Process &rarr;</a></p>
+    </div>
+  </div>
+
+  <div class="tblwrap" style="margin-top:14px">
+    <table class="tbl">
+      <thead>
+        <tr>
+          <th>ADO Capability</th>
+          <th>Live Configuration in <code>org-vcinn</code></th>
+          <th>What It Proves Side-by-Side with GitHub</th>
+          <th class="num">Open Live</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>4-Tier Hierarchy &amp; Dashboard</strong></td>
+          <td>Inherited <code>Agile - Clarity Traceability</code>: Epics <code>#1–#2</code> &rarr; Features <code>#3–#6</code> &rarr; Stories <code>#7–#12</code> &rarr; Tasks <code>#13–#18</code> + <code>WitViewWidget</code> tree</td>
+          <td>Native 4-tier PMO tree + Clarity fields (<code>PRJ-4102</code>, <code>TSK-101</code>) comparable to GitHub Issue Types + Sub-issues</td>
+          <td class="num"><a href="https://dev.azure.com/org-vcinn/LifecycleTraceabilityDemo/_dashboards/dashboard/6e0b6efe-fba4-49d1-ad95-13574c6d0ec2" target="_blank" rel="noopener">Dashboard &rarr;</a></td>
+        </tr>
+        <tr>
+          <td><strong>QA Traceability &amp; Test Run</strong></td>
+          <td>Test Cases <code>#21–#25</code> (<code>TestedBy</code>) + Test Run <code>#2</code> (4 Pass, 1 Fail <code>TC-002</code> &rarr; Bug <code>#19</code> &rarr; Story <code>#7</code>)</td>
+          <td>Unique native test execution &amp; requirement coverage matrix (GitHub models tests as Issues + Actions JUnit)</td>
+          <td class="num"><a href="https://dev.azure.com/org-vcinn/LifecycleTraceabilityDemo/_TestManagement/Runs?runId=2&_a=runCharts" target="_blank" rel="noopener">Run #2 &rarr;</a></td>
+        </tr>
+        <tr class="go">
+          <td><strong>Branch Policies &amp; PR Gate</strong></td>
+          <td><code>main</code> enforces <code>Check for linked work items = Required</code>, <code>Check for comment resolution = On</code> &amp; <code>Automatically request Copilot code review = On</code> (incl. <em>Review draft PRs</em>)</td>
+          <td>Direct pushes to <code>main</code> blocked live (<code>TF402455</code>); mirrors GitHub Ruleset <code>#27660209</code> + <code>PR Traceability Gate</code></td>
+          <td class="num"><a href="https://dev.azure.com/org-vcinn/LifecycleTraceabilityDemo/_settings/repositories?repo=4d51c5c4-0222-4c37-8592-3cd3d21c07c4&_a=policiesMid&refs=refs/heads/main" target="_blank" rel="noopener">Policies &rarr;</a></td>
+        </tr>
+        <tr class="go">
+          <td><strong>Copilot Code Review (Live 3-Tier)</strong></td>
+          <td><a href="https://dev.azure.com/org-vcinn/_settings/repositories" target="_blank" rel="noopener">Org (<code>443/4000</code>)</a> + <a href="https://dev.azure.com/org-vcinn/LifecycleTraceabilityDemo/_settings/repositories?_a=settings" target="_blank" rel="noopener">Project (<code>263/4000</code>, <code>Balanced</code>)</a> + <a href="https://dev.azure.com/org-vcinn/LifecycleTraceabilityDemo/_git/LifecycleTraceabilityDemo?path=/.azuredevops/copilot-instructions.md&version=GBmain" target="_blank" rel="noopener"><code>/.azuredevops/copilot-instructions.md</code></a> &amp; <a href="https://dev.azure.com/org-vcinn/LifecycleTraceabilityDemo/_git/LifecycleTraceabilityDemo?path=/.azuredevops/instructions/saml-clarity.instructions.md&version=GBmain" target="_blank" rel="noopener"><code>applyTo: "**/*.js,**/*.mjs"</code></a> merged to <code>main</code> (<a href="https://dev.azure.com/org-vcinn/LifecycleTraceabilityDemo/_git/LifecycleTraceabilityDemo/pullrequest/5" target="_blank" rel="noopener">PR #5</a>) + <a href="https://dev.azure.com/org-vcinn/LifecycleTraceabilityDemo/_settings/repositories?repo=4d51c5c4-0222-4c37-8592-3cd3d21c07c4" target="_blank" rel="noopener">repo toggle <strong>On</strong></a></td>
+          <td><strong>Live executed on <a href="https://dev.azure.com/org-vcinn/LifecycleTraceabilityDemo/_git/LifecycleTraceabilityDemo/pullrequest/1" target="_blank" rel="noopener">PR #1</a> in 67s:</strong> posted <code>CRITICAL · bug</code> + <code>MODERATE · custom</code> (proving target-branch custom rules fired!)</td>
+          <td class="num"><a href="https://dev.azure.com/org-vcinn/LifecycleTraceabilityDemo/_git/LifecycleTraceabilityDemo/pullrequest/1" target="_blank" rel="noopener">PR #1 &rarr;</a></td>
+        </tr>
+        <tr>
+          <td><strong>YAML CI &amp; Remote MCP Server</strong></td>
+          <td>Pipeline <code>#1</code> (<code>/azure-pipelines.yml</code>, <code>ubuntu-latest</code>) + <code>/.vscode/mcp.json</code> (<code>https://mcp.dev.azure.com/org-vcinn</code>) + <code>workitem.updated</code> Service Hook</td>
+          <td>Declarative CI + Entra-governed MCP audits alongside GitHub Actions <code>CI Test</code> &amp; GitHub MCP</td>
+          <td class="num"><a href="https://dev.azure.com/org-vcinn/LifecycleTraceabilityDemo/_build?definitionId=1" target="_blank" rel="noopener">Pipeline #1 &rarr;</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- VALUE FRAMING + 1-2-3 LIVE WALKTHROUGH + LIVE PR #1 RESULTS -->
+  <div class="exhibit" style="margin-top:14px">
+    <div class="exhibit-kicker">
+      <span>ADO COPILOT CODE REVIEW · CAPABILITY &amp; VALUE WALKTHROUGH (LIVE ON PR #1)</span>
+      <span>STATUS: REVIEW COMPLETED IN 67S · 2 ACTIVE THREADS (1 CUSTOM RULE)</span>
+    </div>
+
+    <div class="say">
+      <div class="yes">
+        <h3>What This Demonstrates &amp; Why Customers Care</h3>
+        <ul>
+          <li><strong>Encode engineering standards once, enforce on every PR:</strong> Platform and security teams define org, project, and repo rules once—Copilot applies those exact test, SAML security, and Clarity sync checks on every PR instead of senior engineers repeating the same comments manually.</li>
+          <li><strong>Path-scoped precision from target branch:</strong> Repo rules live on <code>main</code> under <code>/.azuredevops/</code> and target specific extensions (<code>applyTo: "**/*.js,**/*.mjs"</code>) with 1-click <em>Apply suggestion</em> fixes directly in Azure Repos.</li>
+        </ul>
+      </div>
+      <div class="no">
+        <h3>Human Governance Still Holds the Merge Gate</h3>
+        <ul>
+          <li><strong>Copilot advises; humans approve:</strong> Azure Repos Copilot Code Review always posts a <strong>Comment</strong> review—it never approves PRs or bypasses required human reviewers.</li>
+          <li><strong>Policy-enforced closure:</strong> Pairing Copilot with <code>Check for linked work items = Required</code> and <code>Check for comment resolution = On</code> on <code>main</code> holds the merge until every Copilot thread is resolved or answered.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="seq seq-3" style="margin-top:12px">
+      <div class="sq">
+        <div class="n">STEP 01 · RULES ON MAIN</div>
+        <div class="t">Show Encoded Standards</div>
+        <p>Open <a href="https://dev.azure.com/org-vcinn/LifecycleTraceabilityDemo/_git/LifecycleTraceabilityDemo?path=/.azuredevops/copilot-instructions.md&version=GBmain" target="_blank" rel="noopener"><code>copilot-instructions.md</code></a> &amp; <a href="https://dev.azure.com/org-vcinn/LifecycleTraceabilityDemo/_git/LifecycleTraceabilityDemo?path=/.azuredevops/instructions/saml-clarity.instructions.md&version=GBmain" target="_blank" rel="noopener"><code>applyTo</code> rules</a> on <code>main</code> (merged via <a href="https://dev.azure.com/org-vcinn/LifecycleTraceabilityDemo/_git/LifecycleTraceabilityDemo/pullrequest/5" target="_blank" rel="noopener">PR #5</a>).</p>
+      </div>
+      <div class="sq">
+        <div class="n">STEP 02 · LIVE PR #1</div>
+        <div class="t">Show Real Copilot Comments</div>
+        <p>Open <a href="https://dev.azure.com/org-vcinn/LifecycleTraceabilityDemo/_git/LifecycleTraceabilityDemo/pullrequest/1" target="_blank" rel="noopener"><code>PR #1</code></a> (<code>Story #7 / Bug #19</code>): show Copilot's live <code>CRITICAL · bug</code> &amp; <code>MODERATE · custom</code> findings + <em>Apply suggestion</em> diffs.</p>
+      </div>
+      <div class="sq">
+        <div class="n">STEP 03 · MERGE GATE</div>
+        <div class="t">Show Policy Enforcement</div>
+        <p>Show <a href="https://dev.azure.com/org-vcinn/LifecycleTraceabilityDemo/_settings/repositories?repo=4d51c5c4-0222-4c37-8592-3cd3d21c07c4&_a=policiesMid&refs=refs/heads/main" target="_blank" rel="noopener"><code>main</code> branch policies</a>: both active Copilot threads block PR completion until resolved.</p>
+      </div>
+    </div>
+
+    <dl class="kv">
+      <dt>Rule Hierarchy (3-Tier)</dt>
+      <dd>
+        1. <a href="https://dev.azure.com/org-vcinn/LifecycleTraceabilityDemo/_git/LifecycleTraceabilityDemo?path=/.azuredevops/copilot-instructions.md&version=GBmain" target="_blank" rel="noopener">Repo Instructions (<code>main</code>) &rarr;</a> &middot;
+        2. <a href="https://dev.azure.com/org-vcinn/LifecycleTraceabilityDemo/_settings/repositories?_a=settings" target="_blank" rel="noopener">Project Defaults (<code>Balanced</code>) &rarr;</a> &middot;
+        3. <a href="https://dev.azure.com/org-vcinn/_settings/repositories" target="_blank" rel="noopener">Org Defaults &rarr;</a>
+      </dd>
+      <dt>Where to View &amp; Run</dt>
+      <dd>
+        <a href="https://dev.azure.com/org-vcinn/LifecycleTraceabilityDemo/_git/LifecycleTraceabilityDemo/pullrequest/1" target="_blank" rel="noopener">PR #1 (Live Copilot Comments) &rarr;</a> &middot;
+        <a href="https://dev.azure.com/org-vcinn/LifecycleTraceabilityDemo/_settings/repositories?repo=4d51c5c4-0222-4c37-8592-3cd3d21c07c4" target="_blank" rel="noopener">Repo Toggle (On) &rarr;</a> &middot;
+        <a href="https://dev.azure.com/org-vcinn/LifecycleTraceabilityDemo/_settings/repositories?repo=4d51c5c4-0222-4c37-8592-3cd3d21c07c4&_a=policiesMid&refs=refs/heads/main" target="_blank" rel="noopener"><code>main</code> Branch Policies &rarr;</a>
+      </dd>
+    </dl>
+
+    <div class="script" style="margin-top:14px">
+      <div class="srow">
+        <div class="smeta">
+          <span class="stime" style="color:var(--signal)">Live Thread #8 · Critical</span>
+          <code>/tests/samlValidator.test.mjs</code><br>
+          Bug · Line 1 (Active)
+        </div>
+        <div class="sbody">
+          <h3>Broken escaped newlines caught before merge</h3>
+          <p class="sdo"><strong>Posted live by <code>GitHub Copilot (org-vcinn)</code> on <a href="https://dev.azure.com/org-vcinn/LifecycleTraceabilityDemo/_git/LifecycleTraceabilityDemo/pullrequest/1" target="_blank" rel="noopener">PR #1</a>:</strong></p>
+          <blockquote class="squote">"<strong>CRITICAL · bug:</strong> The file contains literal <code>\n</code> sequences instead of line breaks. Node parses the backslash after the import as an invalid token, so <code>node --test tests/*.test.mjs</code> fails before running this test. Replace the escaped sequences with actual newlines." <em>(+ 1-click Apply Suggestion block)</em></blockquote>
+        </div>
+      </div>
+      <div class="srow">
+        <div class="smeta">
+          <span class="stime">Live Thread #9 · Custom</span>
+          <code>/tests/samlValidator.test.mjs</code><br>
+          <code>custom</code> · Line 1 (Active)
+        </div>
+        <div class="sbody">
+          <h3>Custom instructions fired: caught missing 120s boundary test</h3>
+          <p class="sdo"><strong>Posted live by <code>GitHub Copilot (org-vcinn)</code> tagged <code>MODERATE · custom</code>:</strong></p>
+          <blockquote class="squote">"<strong>MODERATE · custom:</strong> This only exercises a 90-second positive case, so it does not verify the PR's 120-second cutoff or the required rejection when skew exceeds 120 seconds. Add a boundary/negative case (for example, <code>notBefore: 1121</code> at <code>now = 1000</code>) and assert <code>clock_skew_exceeded</code>; otherwise an implementation that accepts arbitrary future assertions would still satisfy this test." <em>(+ 1-click Apply Suggestion rewriting the test!)</em></blockquote>
+        </div>
+      </div>
+    </div>
+
+    <div class="exhibit-cap"><b>Live proof complete.</b> Notice Thread <code>#9</code> carries the <code>custom</code> badge—proving Azure DevOps read your Project + target-branch <code>/.azuredevops/instructions/saml-clarity.instructions.md</code> rules and converted them into actionable, merge-gating PR review comments in 67 seconds. To re-run after pushing fixes, click <em>Reviewers &rarr; GitHub Copilot &rarr; Request</em> on <code>PR #1</code>.</div>
+  </div>
+
+  <div class="faq" style="margin-top:12px">
+    <details>
+      <summary><span>Technical Appendix: Exact Staged Instruction Files on <code>main</code> (<code>PR #5</code>)</span> <span class="qtag">Target-Branch Rules</span></summary>
+      <div class="faq-a">
+        <p>Unlike GitHub.com (which reads from the head branch), Azure DevOps reads custom instructions strictly from the PR's <strong>target branch (<code>main</code>)</strong>, merged here via <a href="https://dev.azure.com/org-vcinn/LifecycleTraceabilityDemo/_git/LifecycleTraceabilityDemo/pullrequest/5" target="_blank" rel="noopener">PR #5</a> (commit <code>84419c45</code>).</p>
+        <pre class="codeblock"># /.azuredevops/copilot-instructions.md (merged onto main via PR #5, commit 84419c45)
+- Traceability: Verify every PR links an Epic/Feature/User Story/Bug (e.g. #7, #19) and updates tests under tests/*.test.mjs.
+- SAML &amp; Security: Verify signatureValid, notBefore/notOnOrAfter 120s clock-skew bounds, finite timestamp guards (Number.isFinite), and replay-cache protection (IdempotencyStore).
+- Clarity PPM Sync: Ensure Custom.ClarityProjectID, Custom.ClarityTaskID, and non-negative CompletedWork deltas are validated.
+
+# /.azuredevops/instructions/saml-clarity.instructions.md (applyTo: "**/*.js,**/*.mjs")
+---
+applyTo: "**/*.js,**/*.mjs"
+---
+- Reject NaN, undefined, or non-finite numbers before timestamp or hour-delta math.
+- Every PR adding or modifying src/*.js must include negative and boundary tests in tests/*.test.mjs passing node --test tests/*.test.mjs.</pre>
+      </div>
+    </details>
+  </div>
+</section>
+
+<!-- 08 LIVE DEMO TALK TRACK -->
+<section class="sec" id="talktrack">
+  <div class="sec-h">
+    <h2>Presenter talk track &amp; side-by-side demo flow</h2>
+    <span class="note">6 scenes · 20-minute showcase</span>
+  </div>
+  <div class="seq">
+    <div class="sq">
+      <div class="n">01 · ANCHOR</div>
+      <div class="t">ADO Baseline</div>
+      <p>Show <code>org-vcinn</code> Dashboard tree (Epics #1–2 &rarr; Story #7 &rarr; Task #13 &rarr; PR #1).</p>
+    </div>
+    <div class="sq">
+      <div class="n">02 · REPLICATE</div>
+      <div class="t">GitHub Projects v2</div>
+      <p>Show Sub-issues + Issue Types + Roadmap/Board grouped by <code>Parent issue</code>.</p>
+    </div>
+    <div class="sq">
+      <div class="n">03 · TRACE</div>
+      <div class="t">Commits &amp; Actions</div>
+      <p>Show <code>Fixes #N</code>, PR-check Actions gate, and <code>actions/add-to-project</code> sync.</p>
+    </div>
+    <div class="sq">
+      <div class="n">04 · AGENTIC</div>
+      <div class="t">Cloud Agent + Review</div>
+      <p>Assign an Issue to Copilot, inspect draft PR, and show Copilot Code Review ruleset.</p>
+    </div>
+    <div class="sq">
+      <div class="n">05 · SECURE</div>
+      <div class="t">Secrets + OIDC</div>
+      <p>Trigger Push Protection block, show CodeQL alert, and show secretless Azure OIDC deploy.</p>
+    </div>
+  </div>
+
+  <div class="script" style="margin-top:14px">
+    <div class="srow">
+      <div class="smeta">
+        <span class="stime">Scene 01 · 3 min</span>
+        ADO Baseline<br>
+        <a href="https://dev.azure.com/org-vcinn/LifecycleTraceabilityDemo/_dashboards/dashboard/6e0b6efe-fba4-49d1-ad95-13574c6d0ec2" target="_blank" rel="noopener">Open ADO Dashboard &rarr;</a>
+      </div>
+      <div class="sbody">
+        <h3>Establish the enterprise traceability bar in Azure DevOps</h3>
+        <p class="sdo"><strong>Show:</strong> Expand Epic <code>#1</code> &rarr; Feature <code>#3</code> &rarr; Story <code>#7</code> &rarr; Task <code>#13</code>, PR <code>#1</code>, and Test Run <code>#2</code> on <code>org-vcinn</code>.</p>
+        <blockquote class="squote">"Here is our live Azure DevOps baseline: Clarity-backed Epics drill cleanly down to User Stories, Sprint Tasks, Test Run #2, and PR #1—enforced by a branch policy that refuses unlinked merges. Now let's answer the big customer question: how much of this can we run natively inside GitHub?"</blockquote>
+      </div>
+    </div>
+
+    <div class="srow">
+      <div class="smeta">
+        <span class="stime">Scene 02 · 4 min</span>
+        GitHub Hierarchy<br>
+        <a href="https://github.com/users/vijaycinn/projects/2" target="_blank" rel="noopener">Open Project #2 &rarr;</a><br>
+        <a href="https://github.com/vijaycinn/lifecycle-traceability-demo/issues" target="_blank" rel="noopener">Open Issues #5–#9 &rarr;</a>
+      </div>
+      <div class="sbody">
+        <h3>Replicate Epic &rarr; Feature &rarr; PBI &rarr; Task with Sub-issues &amp; Issue Types</h3>
+        <p class="sdo"><strong>Show:</strong> Open <code>Project #2 (Lifecycle Traceability Demo)</code> and Issues <code>#5 (Epic) &rarr; #6 (Feature) &rarr; #7 (User Story) &rarr; #8 (Task) / #9 (Bug)</code> plus personal Issue Fields (<code>Clarity Project ID</code>, <code>Clarity Task ID</code>).</p>
+        <blockquote class="squote">"GitHub closed the biggest historical gap with Sub-issues (up to 8 levels deep) and Issue Types—and as of November 2026, Issue Types and Issue Fields are GA even on personal accounts. Here live on my account, Epic #5 drills cleanly down to Task #8 and Bug #9 inside Projects v2 at zero extra seat cost."</blockquote>
+      </div>
+    </div>
+
+    <div class="srow">
+      <div class="smeta">
+        <span class="stime">Scene 03 · 3 min</span>
+        Actions + Traceability<br>
+        <a href="https://github.com/vijaycinn/lifecycle-traceability-demo/actions" target="_blank" rel="noopener">Open Live Actions &rarr;</a><br>
+        <a href="https://github.com/vijaycinn/lifecycle-traceability-demo/settings/rules/27660209" target="_blank" rel="noopener">Ruleset #27660209 &rarr;</a>
+      </div>
+      <div class="sbody">
+        <h3>Automate commit traceability &amp; board movement with GitHub Actions</h3>
+        <p class="sdo"><strong>Show:</strong> Live Actions runs on <code>lifecycle-traceability-demo</code> where <code>CI Test</code> and <code>CodeQL</code> pass while <code>PR Traceability Gate</code> blocks Dependabot PRs <code>#3–#4</code> for missing a <code>Fixes #N</code> / <code>Refs #N</code> / <code>AB#N</code> link, plus ADO Pipeline <code>#1</code>.</p>
+        <blockquote class="squote">"Just like ADO's branch policy, our Ruleset and lightweight <code>PR Traceability Gate</code> workflow immediately caught PRs without a linked issue—while <code>CI Test</code> and <code>CodeQL</code> passed green on GitHub-hosted runners. And if you keep Azure Boards alongside GitHub Repos, connecting the GitHub App unlocks native <code>AB#</code> linkbacks across up to 2,000 repositories."</blockquote>
+      </div>
+    </div>
+
+    <div class="srow">
+      <div class="smeta">
+        <span class="stime">Scene 04 · 4 min</span>
+        Agentic Dev &amp; Review<br>
+        <code>.github/skills/</code>
+      </div>
+      <div class="sbody">
+        <h3>Showcase Copilot Cloud Agent &amp; Automated Copilot Code Review</h3>
+        <p class="sdo"><strong>Show:</strong> <code>.github/copilot-instructions.md</code> and <code>.github/skills/lifecycle-traceability/SKILL.md</code> in <code>lifecycle-traceability-demo</code>, Ruleset toggle <em>Automatically request Copilot code review</em>, and ADO Org Settings &rarr; Repositories.</p>
+        <blockquote class="squote">"Here is how teams govern AI reviewers: custom instructions and repo skills tell Copilot Code Review and Cloud Agent your exact traceability and test rules. On GitHub, Rulesets trigger Copilot review automatically; on Azure Repos Git, native Copilot Code Review is now in Public Preview too—though it remains comment-only."</blockquote>
+      </div>
+    </div>
+
+    <div class="srow">
+      <div class="smeta">
+        <span class="stime">Scene 05 · 3 min</span>
+        Secret Protection &amp; Runners<br>
+        <a href="https://github.com/vijaycinn/lifecycle-traceability-demo/settings/security_analysis" target="_blank" rel="noopener">Security Settings &rarr;</a>
+      </div>
+      <div class="sbody">
+        <h3>Prove shift-left secret blocking &amp; secretless Azure OIDC</h3>
+        <p class="sdo"><strong>Show:</strong> Secret Scanning + Push Protection enabled free on <code>lifecycle-traceability-demo</code>, <code>copilot-workflow</code>, <code>browselee</code>, and <code>el-jev</code>; Dependabot enabled on private <code>copilot-skills</code>; plus <code>browselee</code>'s <code>azure/login@v2</code> OIDC workflow.</p>
+        <blockquote class="squote">"Before code even lands in a PR, Push Protection blocks leaked tokens on our public repos for free—while CodeQL scans the diff and <code>azure/login</code> deploys to Azure over OIDC with zero stored secrets. For private repos like <code>copilot-skills</code>, Dependabot is free out of the box, and Secret Protection adds pre-push blocking at $19 per active committer."</blockquote>
+      </div>
+    </div>
+
+    <div class="srow">
+      <div class="smeta">
+        <span class="stime">Scene 06 · 3 min</span>
+        Licensing &amp; Next Step<br>
+        <code>GHEC + ADO Basic</code>
+      </div>
+      <div class="sbody">
+        <h3>Close on commercial alignment &amp; coexistence economics</h3>
+        <p class="sdo"><strong>Show:</strong> Point to the pricing matrix: GHEC ($21) includes ADO Basic ($6) at $0 extra; Secret Protection ($19) &amp; Code Security ($30) are unbundled on both platforms.</p>
+        <blockquote class="squote">"Economically, you don't pay twice during a transition: GitHub Enterprise Cloud includes Azure DevOps Basic at no extra cost, and both Secret Protection ($19) and Code Security ($30) meter per 90-day active committer through your Azure EA subscription."</blockquote>
+      </div>
+    </div>
+  </div>
+
+  <div class="say" style="margin-top:16px">
+    <div class="yes">
+      <h3>Say</h3>
+      <ul>
+        <li>"GitHub Enterprise Cloud includes Azure DevOps Basic at no extra cost—keep Azure Boards + Test Plans while moving code and agentic workflows to GitHub."</li>
+        <li>"Both platforms now offer decoupled Secret Protection ($19) and Code Security ($30) billed per 90-day active committer."</li>
+        <li>"Native Copilot Code Review now works in Azure Repos Git (Public Preview) AND GitHub (GA), driven by repo custom instructions."</li>
+        <li>"Always pair GitHub Actions and Azure Pipelines with OIDC / Workload Identity Federation so there are zero long-lived Azure secrets to leak."</li>
+      </ul>
+    </div>
+    <div class="no">
+      <h3>Don't say</h3>
+      <ul>
+        <li>"GitHub Projects has a built-in replacement for Azure Test Plans." (Acknowledge honestly: GitHub models test cases as Issues + Actions test reports.)</li>
+        <li>"Copilot Cloud Agent can build PRs directly inside Azure Repos." (Clarify: general issue/work-item-to-PR requires GitHub repos; Azure Repos gets Autofix only.)</li>
+        <li>"<code>GITHUB_TOKEN</code> can update GitHub Projects v2 boards out of the box." (Flag early: Projects v2 workflows need a PAT or GitHub App token.)</li>
+        <li>"Public ADO projects get free unlimited hosted runners forever." (Warn: ADO public projects retire in 2026–2027, reverting inactive ones to 1,800 private mins.)</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 08 REFERENCES & VERIFIED REPOS -->
+<section class="sec" id="refs">
+  <div class="sec-h">
+    <h2>Verified MS Learn, GitHub Docs &amp; quickstart repositories</h2>
+    <span class="note">All links &amp; repos checked live 19 Nov 2026</span>
+  </div>
+
+  <div class="tblwrap">
+    <table class="tbl">
+      <thead>
+        <tr>
+          <th>Topic</th>
+          <th>Verified Documentation Reference</th>
+          <th class="num">Link</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>ADO &harr; GitHub &amp; AB#</strong></td>
+          <td>Link GitHub commits/PRs to Azure Boards (<code>AB#</code> rules) &amp; Connect GitHub App (2,000 repo limit)</td>
+          <td class="num"><a href="https://learn.microsoft.com/azure/devops/boards/github/link-to-from-github?view=azure-devops" target="_blank" rel="noopener">MS Learn &rarr;</a></td>
+        </tr>
+        <tr>
+          <td><strong>Boards &rarr; Copilot Agent</strong></td>
+          <td>Use GitHub Copilot coding agent from Azure Boards work items (GA, custom agents)</td>
+          <td class="num"><a href="https://learn.microsoft.com/azure/devops/boards/github/work-item-integration-github-copilot?view=azure-devops" target="_blank" rel="noopener">MS Learn &rarr;</a></td>
+        </tr>
+        <tr class="go">
+          <td><strong>Copilot Review in AzDO</strong></td>
+          <td>GitHub Copilot Code Review for Azure Repos Git (Sprint 279 Public Preview, billing &amp; instructions)</td>
+          <td class="num"><a href="https://learn.microsoft.com/azure/devops/repos/git/copilot-code-reviews?view=azure-devops" target="_blank" rel="noopener">MS Learn &rarr;</a></td>
+        </tr>
+        <tr>
+          <td><strong>Managed DevOps Pools</strong></td>
+          <td>Azure Managed DevOps Pools architecture, VNet injection, static outbound IPs &amp; pricing</td>
+          <td class="num"><a href="https://learn.microsoft.com/azure/devops/managed-devops-pools/architecture-overview?view=azure-devops" target="_blank" rel="noopener">MS Learn &rarr;</a></td>
+        </tr>
+        <tr>
+          <td><strong>GHAzDO Security &amp; Billing</strong></td>
+          <td>GHAzDO Secret Protection ($19) &amp; Code Security ($30), push protection &amp; Autofix</td>
+          <td class="num"><a href="https://learn.microsoft.com/azure/devops/repos/security/configure-github-advanced-security-features?view=azure-devops" target="_blank" rel="noopener">MS Learn &rarr;</a></td>
+        </tr>
+        <tr>
+          <td><strong>GitHub Sub-issues &amp; Types</strong></td>
+          <td>Sub-issues (8 levels) &amp; Issue Types / Fields (GA for personal accounts Nov 2026)</td>
+          <td class="num"><a href="https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/adding-sub-issues" target="_blank" rel="noopener">GH Docs &rarr;</a></td>
+        </tr>
+        <tr>
+          <td><strong>Projects Actions &amp; PR Links</strong></td>
+          <td>Automating Projects with Actions (PAT/App requirement) &amp; PR closing keywords</td>
+          <td class="num"><a href="https://docs.github.com/en/issues/planning-and-tracking-with-projects/automating-your-project/automating-projects-using-actions" target="_blank" rel="noopener">GH Docs &rarr;</a></td>
+        </tr>
+        <tr>
+          <td><strong>GitHub Copilot Code Review</strong></td>
+          <td>Copilot Code Review (Lite/Balanced/Max AI credits) &amp; Cloud Agent environment setup</td>
+          <td class="num"><a href="https://docs.github.com/en/copilot/concepts/agent-capabilities/agent-powered-workflows-and-operations/code-review" target="_blank" rel="noopener">GH Docs &rarr;</a></td>
+        </tr>
+        <tr>
+          <td><strong>Secret Protection &amp; OIDC</strong></td>
+          <td>GitHub Secret Scanning, Push Protection, Azure OIDC (<code>sub</code> immutable IDs) &amp; Azure EA Billing</td>
+          <td class="num"><a href="https://docs.github.com/en/code-security/concepts/secret-security/push-protection" target="_blank" rel="noopener">GH Docs &rarr;</a></td>
+        </tr>
+        <tr class="hot">
+          <td><strong>ADO Pricing &amp; Retirement</strong></td>
+          <td>Azure DevOps rate card &amp; Public Projects retirement schedule (2026–2027)</td>
+          <td class="num"><a href="https://azure.microsoft.com/en-us/pricing/details/devops/azure-devops-services/" target="_blank" rel="noopener">Azure Price &rarr;</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 style="font-size:13px;text-transform:uppercase;letter-spacing:.08em;margin:22px 0 8px">Active Quickstart Repositories &amp; Your Existing <code>vijaycinn</code> Showcase Assets</h3>
+  <div class="tblwrap">
+    <table class="tbl">
+      <thead>
+        <tr>
+          <th>Repository</th>
+          <th>Why Feature It</th>
+          <th class="num">Repo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="go">
+          <td><code>github/gh-aw</code></td>
+          <td>Official GitHub Agentic Workflows for automated issue triage, PR checks &amp; repo ops (~5.6k stars)</td>
+          <td class="num"><a href="https://github.com/github/gh-aw" target="_blank" rel="noopener">GitHub &rarr;</a></td>
+        </tr>
+        <tr>
+          <td><code>github/awesome-copilot</code></td>
+          <td>Official catalog of custom instructions, agents &amp; skills for Copilot Code Review / Cloud Agent</td>
+          <td class="num"><a href="https://github.com/github/awesome-copilot" target="_blank" rel="noopener">GitHub &rarr;</a></td>
+        </tr>
+        <tr>
+          <td><code>actions/add-to-project</code></td>
+          <td>Official GitHub Action to auto-route Issues &amp; PRs into Projects v2 boards</td>
+          <td class="num"><a href="https://github.com/actions/add-to-project" target="_blank" rel="noopener">GitHub &rarr;</a></td>
+        </tr>
+        <tr>
+          <td><code>microsoft/azure-devops-mcp</code></td>
+          <td>Official Azure DevOps MCP Server (connects Copilot/VS Code to <code>org-vcinn</code> work items &amp; PRs)</td>
+          <td class="num"><a href="https://github.com/microsoft/azure-devops-mcp" target="_blank" rel="noopener">GitHub &rarr;</a></td>
+        </tr>
+        <tr>
+          <td><code>microsoft/GHAzDO-Resources</code></td>
+          <td>Official scripts &amp; rollout templates for GitHub Advanced Security for Azure DevOps</td>
+          <td class="num"><a href="https://github.com/microsoft/GHAzDO-Resources" target="_blank" rel="noopener">GitHub &rarr;</a></td>
+        </tr>
+        <tr>
+          <td><code>Azure-Samples/github-terraform-oidc-ci-cd</code></td>
+          <td>Reference implementation for secretless GitHub Actions OIDC to Azure + Terraform CI/CD</td>
+          <td class="num"><a href="https://github.com/Azure-Samples/github-terraform-oidc-ci-cd" target="_blank" rel="noopener">GitHub &rarr;</a></td>
+        </tr>
+        <tr>
+          <td><code>Azure/terraform-azurerm-avm-res-devopsinfrastructure-pool</code></td>
+          <td>Azure Verified Module (AVM) to provision Managed DevOps Pools with VNet injection</td>
+          <td class="num"><a href="https://github.com/Azure/terraform-azurerm-avm-res-devopsinfrastructure-pool" target="_blank" rel="noopener">GitHub &rarr;</a></td>
+        </tr>
+        <tr class="go">
+          <td><code>vijaycinn/lifecycle-traceability-demo</code></td>
+          <td>Live public GitHub parity demo: 4-tier Sub-issues (<code>#5–#9</code>), Actions PR gate, CodeQL, Secret Protection &amp; <code>.github/skills/</code></td>
+          <td class="num"><a href="https://github.com/vijaycinn/lifecycle-traceability-demo" target="_blank" rel="noopener">vijaycinn &rarr;</a></td>
+        </tr>
+        <tr>
+          <td><code>vijaycinn/browselee</code></td>
+          <td>Live OIDC CI/CD example (<code>azure/login@v2</code> &rarr; ACR &rarr; Azure Container Apps) + Secret Push Protection enabled</td>
+          <td class="num"><a href="https://github.com/vijaycinn/browselee" target="_blank" rel="noopener">vijaycinn &rarr;</a></td>
+        </tr>
+        <tr>
+          <td><code>vijaycinn/Document-Knowledge-Mining-Solution-Accelerator</code></td>
+          <td>Existing repo running <code>codeql.yml</code>, <code>pr-title-checker.yml</code>, <code>dependabot.yml</code> &amp; <code>CODEOWNERS</code></td>
+          <td class="num"><a href="https://github.com/vijaycinn/Document-Knowledge-Mining-Solution-Accelerator" target="_blank" rel="noopener">vijaycinn &rarr;</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p class="callout" style="display:block;margin-top:10px"><span class="msg">Repo hygiene warning: <code>Azure/actions-workflow-samples</code> and <code>microsoft/mvp26-LAB011-end-to-end-agentic-devops-with-azure-mcp</code> are archived—do not cite them as active quickstarts.</span></p>
+</section>
+
+<!-- 10 CUSTOMER ENABLEMENT GUIDE -->
+<section class="sec" id="enablement">
+  <div class="sec-h">
+    <h2>Enablement checklist: free out-of-the-box vs. customer upgrades</h2>
+    <span class="note">What is live now vs. exact steps to unlock more</span>
+  </div>
+  <div class="matrix">
+    <table>
+      <thead>
+        <tr>
+          <th>Feature / Capability</th>
+          <th>Tier &amp; Current Status</th>
+          <th>Easy Step-by-Step Guide (Customer &amp; Demo Prep)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th>4-Tier Issue Hierarchy, Fields &amp; Project v2</th>
+          <td class="is-live">Free · <strong>Enabled Live</strong> on <code>vijaycinn</code></td>
+          <td><strong>Live:</strong> <a href="https://github.com/users/vijaycinn/projects/2" target="_blank" rel="noopener">Project #2 (Lifecycle Traceability Demo)</a> + Issues <code>#5–#9</code> (<code>Epic &rarr; Feature &rarr; User Story &rarr; Task / Bug</code>).<br><strong>Customer steps:</strong> GitHub <em>Profile / Org Settings &rarr; Planning &rarr; Issue types</em> (add <code>Epic</code>, <code>User Story</code>) &amp; <em>Issue fields</em> (add <code>Clarity Project ID</code>, <code>Clarity Task ID</code>) &rarr; link children via <em>Sub-issues &rarr; Add existing issue</em> or <code>gh issue create --parent</code>. (<code>Meeting2Code</code> closed.)</td>
+        </tr>
+        <tr>
+          <th>Free Secret Scanning, Push Protection, CodeQL &amp; Dependabot</th>
+          <td class="is-live">Free · <strong>Enabled Live</strong> on public repos &amp; global <code>vijaycinn</code></td>
+          <td><strong>Live:</strong> Secret Scanning, Push Protection &amp; Dependabot enabled on <code>lifecycle-traceability-demo</code>, <code>copilot-workflow</code>, <code>browselee</code>, and <code>el-jev</code>; Dependency Graph + Dependabot + Grouped Security Updates enabled on private <code>copilot-skills</code>.<br><strong>Customer steps:</strong> User/Org <em>Settings &rarr; Code security</em> &rarr; click <em>Enable all</em> + check <em>Automatically enable for new repositories</em>. Public repos get Secret Protection &amp; CodeQL at <code>$0</code>.</td>
+        </tr>
+        <tr>
+          <th>GitHub Actions Traceability Gate &amp; Ruleset</th>
+          <td class="is-live">Free · <strong>Enabled Live</strong> on <code>main</code></td>
+          <td><strong>Live:</strong> <a href="https://github.com/vijaycinn/lifecycle-traceability-demo/settings/rules/27660209" target="_blank" rel="noopener">Ruleset #27660209</a> requires PRs, CODEOWNERS, <code>ci-test</code>, <code>require-issue-link</code> &amp; CodeQL.<br><strong>To also auto-sync Issues to Project v2:</strong> Create a fine-grained PAT (or Org GitHub App) with <em>Projects: Read &amp; Write</em> &rarr; save as repo secret <code>PROJECT_PAT</code> &rarr; add <code>actions/add-to-project@v1.0.2</code> (<code>GITHUB_TOKEN</code> cannot edit Projects). Run <code>gh auth refresh -h github.com -s project,read:project</code> for CLI project edits.</td>
+        </tr>
+        <tr>
+          <th>ADO Pipeline &amp; Hosted Cloud Runners (<code>org-vcinn</code>)</th>
+          <td>Free tier · <strong>Pipeline #1 Saved</strong> (0 MS-hosted jobs)</td>
+          <td><strong>Live:</strong> <a href="https://dev.azure.com/org-vcinn/LifecycleTraceabilityDemo/_build?definitionId=1" target="_blank" rel="noopener">Pipeline #1</a> points to <code>/azure-pipelines.yml</code> (<code>ubuntu-latest</code>).<br><strong>To run builds free:</strong> Either submit Microsoft's free parallelism request at <code>https://aka.ms/azpipelines-parallelism-request</code> (unlocks 1 free job / 1,800 min/mo), OR register a free self-hosted agent under <em>Org Settings &rarr; Agent pools &rarr; Default</em> (1 free self-hosted job already active).</td>
+        </tr>
+        <tr>
+          <th>GitHub Copilot Code Review &amp; Cloud Agent</th>
+          <td class="is-live"><strong>ADO Live on PR #1</strong> · GitHub on Copilot Free (pre-staged)</td>
+          <td><strong>Azure DevOps (Enabled &amp; Verified Live!):</strong> <a href="https://dev.azure.com/org-vcinn/_settings/repositories" target="_blank" rel="noopener">Org (<code>443/4000</code>)</a> &amp; <a href="https://dev.azure.com/org-vcinn/LifecycleTraceabilityDemo/_settings/repositories?_a=settings" target="_blank" rel="noopener">Project (<code>263/4000</code>)</a> instructions, target-branch <a href="https://dev.azure.com/org-vcinn/LifecycleTraceabilityDemo/_git/LifecycleTraceabilityDemo?path=/.azuredevops/copilot-instructions.md&version=GBmain" target="_blank" rel="noopener"><code>/.azuredevops/copilot-instructions.md</code></a> + <a href="https://dev.azure.com/org-vcinn/LifecycleTraceabilityDemo/_git/LifecycleTraceabilityDemo?path=/.azuredevops/instructions/saml-clarity.instructions.md&version=GBmain" target="_blank" rel="noopener"><code>applyTo</code> rules</a> (<a href="https://dev.azure.com/org-vcinn/LifecycleTraceabilityDemo/_git/LifecycleTraceabilityDemo/pullrequest/5" target="_blank" rel="noopener">PR #5</a>), <a href="https://dev.azure.com/org-vcinn/LifecycleTraceabilityDemo/_settings/repositories?repo=4d51c5c4-0222-4c37-8592-3cd3d21c07c4&_a=policiesMid&refs=refs/heads/main" target="_blank" rel="noopener"><code>main</code> auto-review policy</a>, and <a href="https://dev.azure.com/org-vcinn/LifecycleTraceabilityDemo/_settings/repositories?repo=4d51c5c4-0222-4c37-8592-3cd3d21c07c4" target="_blank" rel="noopener">repo toggle</a> are all <strong>On</strong>—live review completed on <a href="https://dev.azure.com/org-vcinn/LifecycleTraceabilityDemo/_git/LifecycleTraceabilityDemo/pullrequest/1" target="_blank" rel="noopener"><code>PR #1</code></a>.<br><strong>GitHub:</strong> <a href="https://github.com/vijaycinn/lifecycle-traceability-demo/settings/rules/27660209" target="_blank" rel="noopener">Ruleset <code>#27660209</code></a> &amp; <code>.github/copilot-instructions.md</code> + <code>.github/skills/</code> are pre-staged; upgrade <code>Settings &rarr; Copilot</code> to <strong>Copilot Pro ($10)</strong> or <strong>Business ($19)</strong> to trigger live GitHub PR reviews &amp; Cloud Agent.</td>
+        </tr>
+        <tr>
+          <th>Secret Protection on Private Repos (<code>copilot-skills</code> &amp; ADO)</th>
+          <td class="is-risk">Paid · Private repo limitation</td>
+          <td><strong>Why private <code>copilot-skills</code> lacks Push Protection:</strong> GitHub restricts free Secret Protection to <strong>public</strong> repos (or Team/Enterprise Orgs).<br><strong>Customer options:</strong> (1) Move private repos into a GitHub Team (<code>$4</code>) / GHEC (<code>$21</code>) Org and enable <strong>Secret Protection</strong> (<code>$19/committer/mo</code>, adds validity checks &amp; AI secrets); or (2) in ADO, link Azure billing &rarr; <em>Org Settings &rarr; Repositories</em> &rarr; toggle <strong>GHAzDO Secret Protection ($19)</strong> &amp; <strong>Code Security ($30)</strong>.</td>
+        </tr>
+        <tr>
+          <th>Azure Boards &harr; GitHub Hybrid Bridge &amp; MCP</th>
+          <td>Free / Marketplace download</td>
+          <td><strong>Customer steps:</strong> Install the free <strong>Azure Boards GitHub App</strong> from GitHub Marketplace onto target GitHub repos &rarr; authorize in <em>ADO Project Settings &rarr; GitHub connections</em> &rarr; use <code>AB#7</code> / <code>Fixes AB#7</code> in PR descriptions and click <em>Create a PR with GitHub Copilot</em> inside ADO work items. For IDE/CLI audits, keep <code>.vscode/mcp.json</code> pointing to <code>https://mcp.dev.azure.com/org-vcinn</code>.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ROLLOUT TIMELINE -->
+<section class="sec">
+  <div class="sec-h">
+    <h2>Demo readiness timeline</h2>
+    <span class="note">Current state as of 19 Nov 2026</span>
+  </div>
+  <div class="tl">
+    <div class="ti good"><div class="d">Done Live</div><div class="dot"></div><div class="t">Public Repo &amp; Project #2<br><code>lifecycle-traceability-demo</code></div></div>
+    <div class="ti good"><div class="d">Done Live</div><div class="dot"></div><div class="t">Types, Fields &amp; Tree<br>Issues #5–#9 · Ruleset</div></div>
+    <div class="ti good"><div class="d">Done Live</div><div class="dot"></div><div class="t">Free Security &amp; Actions<br>Push Prot · CodeQL · PR Gate</div></div>
+    <div class="ti good"><div class="d">Done Live</div><div class="dot"></div><div class="t">ADO Pipeline #1 Saved<br><code>org-vcinn</code> YAML wired</div></div>
+    <div class="ti now"><div class="d">Optional Next</div><div class="dot"></div><div class="t">Link Azure Sub / Pro<br>Unlock Copilot PR &amp; Hosted</div></div>
+  </div>
+</section>
+
+<footer class="colophon">
+  <b>Sources.</b> Microsoft Learn (Azure DevOps Sprint 257/268/269/279/282 release notes, Copilot Code Review for Azure Repos, Managed DevOps Pools, GHAzDO billing, ADO pricing &amp; public project retirement), GitHub Docs &amp; Changelog (2026-11-11 personal Issue Types/Fields GA, Sub-issues, Copilot Code Review &amp; Cloud Agent, Secret Protection, Actions compute &amp; pricing), and live account inspection.<br>
+  <b>Method &amp; Verification.</b> Live actions &amp; verification on <code>2026-11-19</code>: (1) GitHub <code>vijaycinn</code>: created public repo <code>lifecycle-traceability-demo</code>, Project <code>#2</code> (closed <code>Meeting2Code</code>), Issue Types (<code>Epic</code>, <code>User Story</code>) &amp; Fields (<code>Clarity Project ID</code>, <code>Clarity Task ID</code>), Sub-issues <code>#5 &rarr; #6 &rarr; #7 &rarr; (#8, #9)</code>, Ruleset <code>#27660209</code>, global Dependabot/Dependency Graph (incl. private <code>copilot-skills</code>) + Secret Scanning &amp; Push Protection across public demo repos, and live Actions runs (<code>CI Test</code> &amp; <code>CodeQL</code> pass; <code>PR Traceability Gate</code> blocked PRs <code>#3–#4</code>). (2) Azure DevOps <code>org-vcinn</code>: saved Pipeline <code>#1</code>, saved Org (<code>443/4000</code>) &amp; Project (<code>263/4000</code>) Copilot instructions, enabled <code>Check for comment resolution</code> &amp; <code>Automatically request Copilot code review</code> on <code>main</code>, merged <code>/.azuredevops/copilot-instructions.md</code> &amp; <code>saml-clarity.instructions.md</code> to <code>main</code> via <code>PR #5</code>, and executed a <strong>live GitHub Copilot Code Review on <code>PR #1</code></strong> (succeeded in 67s on <code>Azure Pipelines</code> pool, posting active Thread <code>#8 CRITICAL · bug</code> and Thread <code>#9 MODERATE · custom</code>).<br>
+  <b>Cautions.</b> <code>vijaycinn</code> holds <code>GitHub Copilot Free</code> (live GitHub PR review &amp; Cloud Agent require Copilot Pro/Business/Enterprise); <code>org-vcinn</code> regular CI pipelines still show <code>0</code> MS-hosted parallel jobs until a free grant or paid job is added, and Copilot Code Review usage meters to the linked Azure subscription (<code>GitHub Copilot for AzDO</code>).
+</footer>
+
+</main>
+</body>
+</html>
